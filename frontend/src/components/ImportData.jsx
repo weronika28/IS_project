@@ -5,7 +5,7 @@ const ImportData = () => {
 
     const handleImportFireDepartmentData = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/api/fire-department/import/xml');
+            const response = await axios.post('http://localhost:8080/api/fire-department/import/csv');
             alert(response.data);
         } catch (error) {
             console.error("There was an error importing fire department data!", error);
@@ -15,7 +15,7 @@ const ImportData = () => {
 
     const handleImportVehicleData = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/api/vehicles/import/xml');
+            const response = await axios.post('http://localhost:8080/api/vehicles/import/csv');
             alert(response.data);
         } catch (error) {
             console.error("There was an error importing vehicle data!", error);
@@ -35,3 +35,5 @@ const ImportData = () => {
 };
 
 export default ImportData;
+
+
