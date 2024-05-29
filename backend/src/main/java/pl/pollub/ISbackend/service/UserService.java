@@ -11,7 +11,6 @@ import pl.pollub.ISbackend.model.Role;
 import pl.pollub.ISbackend.model.User;
 import pl.pollub.ISbackend.repository.RoleRepository;
 import pl.pollub.ISbackend.repository.UserRepository;
-import pl.pollub.ISbackend.util.JwtFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +26,6 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtFilter jwtFilter;
 
 
     public User save(User user) {

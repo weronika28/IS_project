@@ -3,6 +3,7 @@ package pl.pollub.ISbackend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pl.pollub.ISbackend.model.FireDepartment;
 import pl.pollub.ISbackend.service.FireDepartmentService;
 
@@ -26,11 +27,7 @@ public class FireDepartmentController {
     @GetMapping("/{id}")
     public ResponseEntity<FireDepartment> getFireDepartmentById(@PathVariable String id) {
         Optional<FireDepartment> fireDepartment = fireDepartmentService.findById(id);
-        if (fireDepartment.isPresent()) {
-            return ResponseEntity.ok(fireDepartment.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return fireDepartment.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -74,6 +71,16 @@ public class FireDepartmentController {
             return ResponseEntity.ok("Import from JSON successful");
         } catch (IOException e) {
             return ResponseEntity.status(500).body("Import from JSON failed: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/import/csv")
+    public ResponseEntity<String> importFromCsv(MultipartFile file) {
+        try {
+            fireDepartmentService.importFromCsv(file);
+            return ResponseEntity.ok("Import from CSV successful");
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Import from CSV failed: " + e.getMessage());
         }
     }
 
