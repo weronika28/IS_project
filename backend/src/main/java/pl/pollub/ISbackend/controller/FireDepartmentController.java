@@ -75,12 +75,12 @@ public class FireDepartmentController {
     }
 
     @PostMapping("/import/csv")
-    public ResponseEntity<String> importFromCsv(MultipartFile file) {
+    public ResponseEntity<String> importFromCsv(@RequestParam("file") MultipartFile file) {
         try {
             fireDepartmentService.importFromCsv(file);
-            return ResponseEntity.ok("Import from CSV successful");
+            return ResponseEntity.ok("Import z CSV zakończony sukcesem");
         } catch (IOException e) {
-            return ResponseEntity.status(500).body("Import from CSV failed: " + e.getMessage());
+            return ResponseEntity.status(500).body("Import z CSV nie powiódł się: " + e.getMessage());
         }
     }
 

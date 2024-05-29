@@ -11,7 +11,7 @@ import java.util.Date;
 
 public class FireDepartment {
     @Id
-    @Column(name = "ID_MELDUNEK")
+    @Column(name = "ID_MELDUNEK", length = 50)
     private String idMeldunek;
 
     @Column(name = "F_BEZ_JOP")
