@@ -10,112 +10,112 @@ import java.util.Date;
 @Data
 
 public class FireDepartment {
-    @Id
-    @Column(name = "ID_MELDUNEK", length = 50)
-    private String idMeldunek;
+        @Id
+        @Column(name = "ID_MELDUNEK")
+        private String idMeldunek;
 
-    @Column(name = "F_BEZ_JOP")
-    private String fBezJop;
+        @Column(name = "F_BEZ_JOP")
+        private String fBezJop;
 
-    @Column(name = "OPERATION_TYPE")
-    private String operationType;
+        @Column(name = "OPERATION_TYPE")
+        private String operationType;
 
-    @Column(name = "RODZAJ")
-    private String rodzaj;
+        @Column(name = "RODZAJ")
+        private String rodzaj;
 
-    @Column(name = "WLK")
-    private String wlk;
+        @Column(name = "WLK")
+        private String wlk;
 
-    @Column(name = "F_MZ_RODZ_10")
-    private String fMzRodz10;
+        @Column(name = "F_MZ_RODZ_10")
+        private String fMzRodz10;
 
-    @Column(name = "TERYT")
-    private Integer teryt;
+        @Column(name = "TERYT")
+        private Double teryt;
 
-    @Column(name = "WOJEWODZTWO")
-    private String wojewodztwo;
+        @Column(name = "WOJEWODZTWO")
+        private String wojewodztwo;
 
-    @Column(name = "POWIAT")
-    private String powiat;
+        @Column(name = "POWIAT")
+        private String powiat;
 
-    @Column(name = "GMINA")
-    private String gmina;
+        @Column(name = "GMINA")
+        private String gmina;
 
-    @Column(name = "LOC_ROAD_NUMBER")
-    private Integer locRoadNumber;
+        @Column(name = "LOC_ROAD_NUMBER")
+        private String locRoadNumber;
 
-    @Column(name = "LOC_ROAD_CHAINAGE")
-    private Integer locRoadChainage;
+        @Column(name = "LOC_ROAD_CHAINAGE")
+        private String locRoadChainage;
 
-    @Column(name = "DATA_ZAU")
-    private Date dataZau;
+        @Column(name = "DATA_ZAU")
+        private Date dataZau;
 
-    @Column(name = "DATA_LOK")
-    private Date dataLok;
+        @Column(name = "DATA_LOK")
+        private Date dataLok;
 
-    @Column(name = "DATA_USU")
-    private Date dataUsu;
+        @Column(name = "DATA_USU")
+        private Date dataUsu;
 
-    @Column(name = "KILOM_1")
-    private Integer kilom1;
+        @Column(name = "KILOM_1")
+        private Double kilom1;
 
-    @Column(name = "DATA_ZGL")
-    private Date dataZgl;
+        @Column(name = "DATA_ZGL")
+        private Date dataZgl;
 
-    @Column(name = "DATA_DOJ")
-    private Date dataDoj;
+        @Column(name = "DATA_DOJ")
+        private Date dataDoj;
 
-    @Column(name = "DATA_POW")
-    private Date dataPow;
+        @Column(name = "DATA_POW")
+        private Date dataPow;
 
-    @Column(name = "SUM_CZAS")
-    private String sumCzas;
+        @Column(name = "SUM_CZAS")
+        private String sumCzas;
 
-    @Column(name = "IL_P_WOD")
-    private Integer ilPWod;
+        @Column(name = "IL_P_WOD")
+        private Double ilPWod;
 
-    @Column(name = "IL_P_PROSZ")
-    private Integer ilPProsz;
+        @Column(name = "IL_P_PROSZ")
+        private Double ilPProsz;
 
-    @Column(name = "IL_P_PIAN")
-    private Integer ilPPian;
+        @Column(name = "IL_P_PIAN")
+        private Double ilPPian;
 
-    @Column(name = "IL_P_PIANC")
-    private Integer ilPPianc;
+        @Column(name = "IL_P_PIANC")
+        private Double ilPPianc;
 
-    @Column(name = "IL_P_PIANS")
-    private Integer ilPPians;
+        @Column(name = "IL_P_PIANS")
+        private Double ilPPians;
 
-    @Column(name = "IL_P_PIANL")
-    private Integer ilPPianl;
+        @Column(name = "IL_P_PIANL")
+        private Double ilPPianl;
 
-    @Column(name = "ZUZ_WODY")
-    private Integer zuzWody;
+        @Column(name = "ZUZ_WODY")
+        private Double zuzWody;
 
-    @Column(name = "ZUZ_PROSZKU")
-    private Integer zuzProszku;
+        @Column(name = "ZUZ_PROSZKU")
+        private Double zuzProszku;
 
-    @Column(name = "ZUZ_PIANY")
-    private Integer zuzPiany;
+        @Column(name = "ZUZ_PIANY")
+        private Double zuzPiany;
 
-    @Column(name = "ZUZ_NEUT")
-    private Integer zuzNeut;
+        @Column(name = "ZUZ_NEUT")
+        private Double zuzNeut;
 
-    @Column(name = "ZUZ_SORB")
-    private Integer zuzSorb;
+        @Column(name = "ZUZ_SORB")
+        private Double zuzSorb;
 
-    @Column(name = "WYP_PSP_S")
-    private Integer wypPspS;
+        @Column(name = "WYP_PSP_S")
+        private Double wypPspS;
 
-    @Column(name = "ZL")
-    private Integer zl;
+        @Column(name = "ZL")
+        private Double zl;
 
-    @Column(name = "IL1")
-    private Integer il1;
+        @Column(name = "IL1")
+        private Double il1;
 
-    @Column(name = "IL2")
-    private Integer il2;
+        @Column(name = "IL2")
+        private Double il2;
 
-    @Column(name = "IL3")
-    private Integer il3;
-}
+        @Column(name = "IL3")
+        private Double il3;
+    }

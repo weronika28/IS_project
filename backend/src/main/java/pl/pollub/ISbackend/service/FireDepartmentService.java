@@ -13,6 +13,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -63,27 +65,68 @@ public class FireDepartmentService {
         fireDepartmentRepository.saveAll(fireDepartments);
     }
 
+    private String getValueOrNull(String value) {
+        return value.isEmpty() ? null : value;
+    }
+
+    private Integer getIntegerValueOrNull(String value) {
+        return value.isEmpty() ? null : Integer.parseInt(value);
+    }
+
+    private Double getDoubleValueOrNull(String value) {
+        if (value.isEmpty()) {
+            return null;
+        } else {
+            if (value.contains(",")) {
+                return Double.parseDouble(value.replace(",", "."));
+            } else {
+                return Double.parseDouble(value);
+            }
+        }
+    }
+
+
+
+    private Date getDateOrNull(String value) {
+        if (value.isEmpty()) {
+            return null;
+        } else {
+            try {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                return dateFormat.parse(value);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+    }
+
+
 
     public void importFromCsv(MultipartFile file) throws IOException {
         List<FireDepartment> fireDepartments = new ArrayList<>();
-        List<String> selectedColumnNames = Arrays.asList("ID_MELDUNEK", "F_BEZ_JOP", "OPERATION_TYPE", "RODZAJ", "WLK", "F_MZ_RODZ_10", "TERYT", "WOJEWODZTWO", "POWIAT", "GMINA", "LOC_ROAD_NUMBER", "LOC_ROAD_CHAINAGE", "DATA_ZAU", "DATA_LOK", "DATA_USU", "KILOM_1", "DATA_ZGL", "DATA_DOJ", "DATA_POW", "SUM_CZAS", "IL_P_WOD", "IL_P_PROSZ", "IL_P_PIAN", "IL_P_PIANC", "IL_P_PIANS", "IL_P_PIANL", "ZUZ_WODY", "ZUZ_PROSZKU", "ZUZ_PIANY", "ZUZ_NEUT", "ZUZ_SORB", "WYP_PSP_S", "ZL", "IL1", "IL2", "IL3");
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             String line;
-            int lineNumber = 0;
+            int lineNumber = 1;
+
+            List<String> selectedColumnNames = splitLine(reader.readLine());
             while ((line = reader.readLine()) != null) {
                 lineNumber++;
                 try {
                     List<String> data = splitLine(line);
-                    System.out.println("Data after split: " + data);
-
+                   // System.out.println("Data after split: " + data);
 
                     FireDepartment fireDepartment = new FireDepartment();
                     for (int i = 0; i < data.size(); i++) {
                         String columnName = selectedColumnNames.get(i);
                         switch (columnName) {
                             case "ID_MELDUNEK":
-                                fireDepartment.setIdMeldunek(data.get(i));
+                                String idMeldunek = data.get(i);
+                                if(idMeldunek.length() > 50) {
+                                    throw new Exception("ID_MELDUNEK: "+idMeldunek+" is too long for data: "+data);
+                                }
+                                fireDepartment.setIdMeldunek(idMeldunek);
                                 break;
                             case "F_BEZ_JOP":
                                 fireDepartment.setFBezJop(data.get(i));
@@ -101,7 +144,7 @@ public class FireDepartmentService {
                                 fireDepartment.setFMzRodz10(data.get(i));
                                 break;
                             case "TERYT":
-                                fireDepartment.setTeryt(Integer.parseInt(data.get(i)));
+                                fireDepartment.setTeryt(getDoubleValueOrNull(data.get(i)));
                                 break;
                             case "WOJEWODZTWO":
                                 fireDepartment.setWojewodztwo(data.get(i));
@@ -113,86 +156,85 @@ public class FireDepartmentService {
                                 fireDepartment.setGmina(data.get(i));
                                 break;
                             case "LOC_ROAD_NUMBER":
-                                fireDepartment.setLocRoadNumber(Integer.parseInt(data.get(i)));
+                                fireDepartment.setLocRoadNumber(data.get(i));
                                 break;
                             case "LOC_ROAD_CHAINAGE":
-                                fireDepartment.setLocRoadChainage(Integer.parseInt(data.get(i)));
+                                fireDepartment.setLocRoadChainage(data.get(i));
                                 break;
                             case "DATA_ZAU":
-                                fireDepartment.setDataZau(new Date(Long.parseLong(data.get(i))));
+                                fireDepartment.setDataZau(getDateOrNull(data.get(i)));
                                 break;
                             case "DATA_LOK":
-                                fireDepartment.setDataLok(new Date(Long.parseLong(data.get(i))));
+                                fireDepartment.setDataLok(getDateOrNull(data.get(i)));
                                 break;
                             case "DATA_USU":
-                                fireDepartment.setDataUsu(new Date(Long.parseLong(data.get(i))));
+                                fireDepartment.setDataUsu(getDateOrNull(data.get(i)));
                                 break;
                             case "KILOM_1":
-                                fireDepartment.setKilom1(Integer.parseInt(data.get(i)));
+                                fireDepartment.setKilom1(getDoubleValueOrNull(data.get(i)));
                                 break;
                             case "DATA_ZGL":
-                                fireDepartment.setDataZgl(new Date(Long.parseLong(data.get(i))));
+                                fireDepartment.setDataZgl(getDateOrNull(data.get(i)));
                                 break;
                             case "DATA_DOJ":
-                                fireDepartment.setDataDoj(new Date(Long.parseLong(data.get(i))));
+                                fireDepartment.setDataDoj(getDateOrNull(data.get(i)));
                                 break;
                             case "DATA_POW":
-                                fireDepartment.setDataPow(new Date(Long.parseLong(data.get(i))));
+                                fireDepartment.setDataPow(getDateOrNull(data.get(i)));
                                 break;
                             case "SUM_CZAS":
                                 fireDepartment.setSumCzas(data.get(i));
                                 break;
                             case "IL_P_WOD":
-                                fireDepartment.setIlPWod(Integer.parseInt(data.get(i)));
+                                fireDepartment.setIlPWod(getDoubleValueOrNull(data.get(i)));
                                 break;
                             case "IL_P_PROSZ":
-                                fireDepartment.setIlPProsz(Integer.parseInt(data.get(i)));
+                                fireDepartment.setIlPProsz(getDoubleValueOrNull(data.get(i)));
                                 break;
                             case "IL_P_PIAN":
-                                fireDepartment.setIlPPian(Integer.parseInt(data.get(i)));
+                                fireDepartment.setIlPPian(getDoubleValueOrNull(data.get(i)));
                                 break;
                             case "IL_P_PIANC":
-                                fireDepartment.setIlPPianc(Integer.parseInt(data.get(i)));
+                                fireDepartment.setIlPPianc(getDoubleValueOrNull(data.get(i)));
                                 break;
                             case "IL_P_PIANS":
-                                fireDepartment.setIlPPians(Integer.parseInt(data.get(i)));
+                                fireDepartment.setIlPPians(getDoubleValueOrNull(data.get(i)));
                                 break;
                             case "IL_P_PIANL":
-                                fireDepartment.setIlPPianl(Integer.parseInt(data.get(i)));
+                                fireDepartment.setIlPPianl(getDoubleValueOrNull(data.get(i)));
                                 break;
                             case "ZUZ_WODY":
-                                fireDepartment.setZuzWody(Integer.parseInt(data.get(i)));
+                                fireDepartment.setZuzWody(getDoubleValueOrNull(data.get(i)));
                                 break;
                             case "ZUZ_PROSZKU":
-                                fireDepartment.setZuzProszku(Integer.parseInt(data.get(i)));
+                                fireDepartment.setZuzProszku(getDoubleValueOrNull(data.get(i)));
                                 break;
                             case "ZUZ_PIANY":
-                                fireDepartment.setZuzPiany(Integer.parseInt(data.get(i)));
+                                fireDepartment.setZuzPiany(getDoubleValueOrNull(data.get(i)));
                                 break;
                             case "ZUZ_NEUT":
-                                fireDepartment.setZuzNeut(Integer.parseInt(data.get(i)));
+                                fireDepartment.setZuzNeut(getDoubleValueOrNull(data.get(i)));
                                 break;
                             case "ZUZ_SORB":
-                                fireDepartment.setZuzSorb(Integer.parseInt(data.get(i)));
+                                fireDepartment.setZuzSorb(getDoubleValueOrNull(data.get(i)));
                                 break;
                             case "WYP_PSP_S":
-                                fireDepartment.setWypPspS(Integer.parseInt(data.get(i)));
+                                fireDepartment.setWypPspS(getDoubleValueOrNull(data.get(i)));
                                 break;
                             case "ZL":
-                                fireDepartment.setZl(Integer.parseInt(data.get(i)));
+                                fireDepartment.setZl(getDoubleValueOrNull(data.get(i)));
                                 break;
                             case "IL1":
-                                fireDepartment.setIl1(Integer.parseInt(data.get(i)));
+                                fireDepartment.setIl1(getDoubleValueOrNull(data.get(i)));
                                 break;
                             case "IL2":
-                                fireDepartment.setIl2(Integer.parseInt(data.get(i)));
+                                fireDepartment.setIl2(getDoubleValueOrNull(data.get(i)));
                                 break;
                             case "IL3":
-                                fireDepartment.setIl3(Integer.parseInt(data.get(i)));
+                                fireDepartment.setIl3(getDoubleValueOrNull(data.get(i)));
                                 break;
                             default:
-                                // Obsługa nieznanej kolumny
-                                System.err.println("Unknown column name: " + columnName);
+                                break;
                         }
                     }
 
@@ -200,10 +242,11 @@ public class FireDepartmentService {
                 } catch (Exception e) {
                     System.err.println("Error processing line " + lineNumber + ": " + line);
                     e.printStackTrace();
+                    return;
                 }
             }
         } catch (IOException e) {
-            System.err.println("Error reading file: " + e.getMessage());
+            //System.err.println("Error reading file: " + e.getMessage());
             throw e;
         }
 
@@ -224,7 +267,7 @@ public class FireDepartmentService {
         for (char c : line.toCharArray()) {
             if (c == '"') {
                 inQuotes = !inQuotes;
-            } else if (c == ',' && !inQuotes) {
+            } else if (c == ';' && !inQuotes) {
                 values.add(sb.toString());
                 sb.setLength(0);
             } else {
