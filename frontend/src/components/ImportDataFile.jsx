@@ -9,11 +9,21 @@ const ImportDataFile = () => {
     const [loadingVehicle, setLoadingVehicle] = useState(false);
 
     const handleFireDepartmentFileChange = (e) => {
-        setFireDepartmentFile(e.target.files[0]);
+        const file = e.target.files[0];
+        if (file && file.name.endsWith('.csv')) {
+            setFireDepartmentFile(file);
+        } else {
+            alert("Proszę wybrać plik CSV.");
+        }
     };
 
     const handleVehicleFileChange = (e) => {
-        setVehicleFile(e.target.files[0]);
+        const file = e.target.files[0];
+        if (file && file.name.endsWith('.csv')) {
+            setVehicleFile(file);
+        } else {
+            alert("Proszę wybrać plik CSV.");
+        }
     };
 
     const handleImportFireDepartmentData = async () => {
@@ -70,13 +80,13 @@ const ImportDataFile = () => {
         <div className="import-data-container">
             <h2>Tu zaimportujesz dane dotyczące wyjazdów strażackich oraz dane dotyczące zarejestrowanych pojazdów</h2>
             <div className="import-section">
-                <input type="file" onChange={handleFireDepartmentFileChange} />
+                <input type="file" accept=".csv" onChange={handleFireDepartmentFileChange} />
                 <button className="import-button" onClick={handleImportFireDepartmentData} disabled={loadingFireDepartment}>
                     {loadingFireDepartment ? <FaSpinner className="spinner" /> : "Importuj dane straży pożarnej"}
                 </button>
             </div>
             <div className="import-section">
-                <input type="file" onChange={handleVehicleFileChange} />
+                <input type="file" accept=".csv" onChange={handleVehicleFileChange} />
                 <button className="import-button" onClick={handleImportVehicleData} disabled={loadingVehicle}>
                     {loadingVehicle ? <FaSpinner className="spinner" /> : "Importuj dane pojazdów"}
                 </button>
