@@ -3,6 +3,7 @@ package pl.pollub.ISbackend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pl.pollub.ISbackend.model.Vehicle;
 import pl.pollub.ISbackend.service.VehicleService;
 
@@ -65,4 +66,14 @@ public class VehicleController {
             return ResponseEntity.status(500).body("Import from XML failed: " + e.getMessage());
         }
     }
+    @PostMapping("/import/csv")
+    public ResponseEntity<String> importFromCsv(@RequestParam("file") MultipartFile file) {
+        try {
+            vehicleService.importFromCsv(file);
+            return ResponseEntity.ok("Import z CSV zakończony sukcesem");
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Import z CSV nie powiódł się: " + e.getMessage());
+        }
+    }
+
 }

@@ -10,5 +10,16 @@ public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-// nie wiem jakie pola
+
+    @Column(name = "DATA_PIERWSZEJ_REJESTRACJI_W_KRAJU")
+    private String dataPierwszejRejestracjiWKraju;
+
+    @Column(name = "REJESTRACJA_WOJEWODZTWO")
+    private String rejestracjaWojewodztwo;
+
+    @Column(name = "REJESTRACJA_GMINA")
+    private String rejestracjaGmina;
+
+    @Column(name = "REJESTRACJA_POWIAT")
+    private String rejestracjaPowiat;
 }
