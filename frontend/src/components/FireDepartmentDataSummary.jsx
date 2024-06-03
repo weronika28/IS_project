@@ -49,9 +49,9 @@ const FireDepartmentDataSummary = () => {
     const chartOptions = {
         scales: {
             y: {
-                beginAtZero: true, // Skala zaczyna się od zera
+                beginAtZero: true,
                 ticks: {
-                    precision: 2 // Precyzja wyświetlania wartości na osi Y (dwie liczby po przecinku)
+                    precision: 2
                 }
             }
         }
