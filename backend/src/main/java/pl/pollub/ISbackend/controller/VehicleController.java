@@ -3,7 +3,6 @@ package pl.pollub.ISbackend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import pl.pollub.ISbackend.model.Vehicle;
 import pl.pollub.ISbackend.service.VehicleService;
 
@@ -66,13 +65,23 @@ public class VehicleController {
             return ResponseEntity.status(500).body("Import from XML failed: " + e.getMessage());
         }
     }
-    @PostMapping("/import/csv")
-    public ResponseEntity<String> importFromCsv(@RequestParam("file") MultipartFile file) {
+//    @PostMapping("/import/csv")
+//    public ResponseEntity<String> importFromCsv(@RequestParam("file") MultipartFile file) {
+//        try {
+//            vehicleService.importFromCsv(file);
+//            return ResponseEntity.ok("Import z CSV zakończony sukcesem");
+//        } catch (IOException e) {
+//            return ResponseEntity.status(500).body("Import z CSV nie powiódł się: " + e.getMessage());
+//        }
+//    }
+    @PostMapping("/import/api")
+    public ResponseEntity<String> importFromApi(@RequestParam String wojewodztwo) {
+        String apiUrlBase = "https://api.cepik.gov.pl/pojazdy?data-od=20230101&data-do=20231231&typ-daty=1&tylko-zarejestrowane=true&pokaz-wszystkie-pola=false&fields=data-pierwszej-rejestracji-w-kraju&fields=rejestracja-wojewodztwo&fields=rejestracja-powiat&fields=marka&fields=rodzaj-paliwa&limit=500";
         try {
-            vehicleService.importFromCsv(file);
-            return ResponseEntity.ok("Import z CSV zakończony sukcesem");
+            vehicleService.importFromApi(apiUrlBase, wojewodztwo);
+            return ResponseEntity.ok("Import from API successful");
         } catch (IOException e) {
-            return ResponseEntity.status(500).body("Import z CSV nie powiódł się: " + e.getMessage());
+            return ResponseEntity.status(500).body("Import from API failed: " + e.getMessage());
         }
     }
 

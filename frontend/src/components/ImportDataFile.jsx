@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { FaSpinner } from 'react-icons/fa';
 
@@ -7,6 +7,7 @@ const ImportDataFile = () => {
     const [vehicleFile, setVehicleFile] = useState(null);
     const [loadingFireDepartment, setLoadingFireDepartment] = useState(false);
     const [loadingVehicle, setLoadingVehicle] = useState(false);
+    const [loadingVehicleApi, setLoadingVehicleApi] = useState(false);
 
     const handleFireDepartmentFileChange = (e) => {
         const file = e.target.files[0];
@@ -76,19 +77,38 @@ const ImportDataFile = () => {
         }
     };
 
+    const handleImportVehicleDataFromApi = async () => {
+        setLoadingVehicleApi(true);
+        try {
+            const response = await axios.post('http://localhost:5000/api/vehicles/import/api?wojewodztwo=02');
+            alert(response.data);
+        } catch (error) {
+            console.error("Wystąpił błąd podczas importowania danych pojazdów z API!", error);
+            alert("Błąd podczas importowania danych pojazdów z API.");
+        } finally {
+            setLoadingVehicleApi(false);
+        }
+    };
+
     return (
         <div className="import-data-container">
             <hn>Tu zaimportujesz dane dotyczące wyjazdów strażackich oraz dane dotyczące zarejestrowanych pojazdów</hn>
             <div className="import-section">
-                <input type="file" accept=".csv" onChange={handleFireDepartmentFileChange} />
-                <button className="import-button" onClick={handleImportFireDepartmentData} disabled={loadingFireDepartment}>
-                    {loadingFireDepartment ? <FaSpinner className="spinner" /> : "Importuj dane straży pożarnej"}
+                <input type="file" accept=".csv" onChange={handleFireDepartmentFileChange}/>
+                <button className="import-button" onClick={handleImportFireDepartmentData}
+                        disabled={loadingFireDepartment}>
+                    {loadingFireDepartment ? <FaSpinner className="spinner"/> : "Importuj dane straży pożarnej"}
                 </button>
             </div>
             <div className="import-section">
-                <input type="file" accept=".csv" onChange={handleVehicleFileChange} />
+                <input type="file" accept=".csv" onChange={handleVehicleFileChange}/>
                 <button className="import-button" onClick={handleImportVehicleData} disabled={loadingVehicle}>
-                    {loadingVehicle ? <FaSpinner className="spinner" /> : "Importuj dane pojazdów"}
+                    {loadingVehicle ? <FaSpinner className="spinner"/> : "Importuj dane pojazdów"}
+                </button>
+            </div>
+            <div className="import-section">
+                <button className="import-button" onClick={handleImportVehicleDataFromApi} disabled={loadingVehicleApi}>
+                    {loadingVehicleApi ? <FaSpinner className="spinner"/> : "Importuj dane pojazdów z API"}
                 </button>
             </div>
         </div>

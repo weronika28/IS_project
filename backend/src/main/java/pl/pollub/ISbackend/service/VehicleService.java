@@ -1,23 +1,22 @@
 package pl.pollub.ISbackend.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import pl.pollub.ISbackend.model.Vehicle;
 import pl.pollub.ISbackend.repository.VehicleRepository;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 
 @Service
 public class VehicleService {
@@ -56,90 +55,61 @@ public class VehicleService {
         List<Vehicle> vehicles = mapper.readValue(new File(filePath), new TypeReference<List<Vehicle>>(){});
         vehicleRepository.saveAll(vehicles);
     }
-    private String getValueOrNull(String value) {
-        return value.isEmpty() ? null : value;
-    }
 
-    private Integer getIntegerValueOrNull(String value) {
-        return value.isEmpty() ? null : Integer.parseInt(value);
-    }
 
-    private Double getDoubleValueOrNull(String value) {
-        if (value.isEmpty()) {
-            return null;
-        } else {
-            if (value.contains(",")) {
-                return Double.parseDouble(value.replace(",", "."));
-            } else {
-                return Double.parseDouble(value);
-            }
-        }
-    }
-
-    private Date getDateOrNull(String value) {
-        if (value.isEmpty()) {
-            return null;
-        } else {
-            try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                return dateFormat.parse(value);
-            } catch (ParseException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-    }
-
-    public void importFromCsv(MultipartFile file) throws IOException {
-        List<Vehicle> vehicles = new ArrayList<>();
-
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
-            String line;
-            int lineNumber = 1;
-
-            List<String> selectedColumnNames = splitLine(reader.readLine());
-            while ((line = reader.readLine()) != null) {
-                lineNumber++;
-                try {
-                    List<String> data = splitLine(line);
-                    Vehicle vehicle = new Vehicle();
-                    for (int i = 0; i < data.size(); i++) {
-                        String columnName = selectedColumnNames.get(i);
-                        switch (columnName) {
-                            case "ID":
-                                vehicle.setId(getLongValueOrNull(data.get(i)));
-                                break;
-                            case "DATA_PIERWSZEJ_REJESTRACJI_W_KRAJU":
-                                vehicle.setDataPierwszejRejestracjiWKraju((data.get(i)));
-                                break;
-                            case "REJESTRACJA_WOJEWODZTWO":
-                                vehicle.setRejestracjaWojewodztwo(data.get(i));
-                                break;
-                            case "REJESTRACJA_GMINA":
-                                vehicle.setRejestracjaGmina(data.get(i));
-                                break;
-                            case "REJESTRACJA_POWIAT":
-                                vehicle.setRejestracjaPowiat(data.get(i));
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    vehicles.add(vehicle);
-                } catch (Exception e) {
-                    System.err.println("Error processing line " + lineNumber + ": " + line);
-                    e.printStackTrace();
-                    return;
-                }
-            }
-        } catch (IOException e) {
-            throw e;
-        }
-
-        System.out.println("Liczba wierszy do zapisania: " + vehicles.size());
-        vehicleRepository.saveAll(vehicles);
-        System.out.println("Zapis danych do bazy danych zakończony.");
-    }
+//    public void importFromCsv(MultipartFile file) throws IOException {
+//        List<Vehicle> vehicles = new ArrayList<>();
+//
+//        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+//            String line;
+//            int lineNumber = 1;
+//
+//            List<String> selectedColumnNames = splitLine(reader.readLine());
+//            while ((line = reader.readLine()) != null) {
+//                lineNumber++;
+//                try {
+//                    List<String> data = splitLine(line);
+//                    Vehicle vehicle = new Vehicle();
+//                    for (int i = 0; i < data.size(); i++) {
+//                        String columnName = selectedColumnNames.get(i);
+//                        switch (columnName) {
+//                            case "ID":
+//                                vehicle.setId(getLongValueOrNull(data.get(i)));
+//                                break;
+//                            case "DATA_PIERWSZEJ_REJESTRACJI_W_KRAJU":
+//                                vehicle.setDataPierwszejRejestracjiWKraju((data.get(i)));
+//                                break;
+//                            case "REJESTRACJA_WOJEWODZTWO":
+//                                vehicle.setRejestracjaWojewodztwo(data.get(i));
+//                                break;
+//                            case "REJESTRACJA_POWIAT":
+//                                vehicle.setRejestracjaPowiat(data.get(i));
+//                                break;
+//                            case "MARKA":
+//                                vehicle.setMarka(data.get(i));
+//                                break;
+//                            case "RODZAJ_PALIWA":
+//                                vehicle.setRodzajPaliwa(data.get(i));
+//                                break;
+//                            default:
+//                                break;
+//                        }
+//                    }
+//                    vehicles.add(vehicle);
+//                } catch (Exception e) {
+//                    System.err.println("Error processing line " + lineNumber + ": " + line);
+//                    e.printStackTrace();
+//                    return;
+//                }
+//            }
+//        } catch (IOException e) {
+//            throw e;
+//        }
+//
+//        System.out.println("Liczba wierszy do zapisania: " + vehicles.size());
+//        vehicleRepository.saveAll(vehicles);
+//        System.out.println("Zapis danych do bazy danych zakończony.");
+//    }
 
     private List<String> splitLine(String line) {
         List<String> values = new ArrayList<>();
@@ -162,7 +132,114 @@ public class VehicleService {
         return values;
     }
 
-    private Long getLongValueOrNull(String value) {
-        return value.isEmpty() ? null : Long.parseLong(value);
+    public void importFromApi(String apiUrlBase, String wojewodztwo) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Vehicle> allVehicles = new ArrayList<>();
+
+        int page = 1;
+        boolean hasMoreData = true;
+
+        while (hasMoreData) {
+            String apiUrl = String.format("%s&wojewodztwo=%s&page=%d", apiUrlBase, wojewodztwo, page);
+            String jsonContent = fetchJsonContent(apiUrl);
+            System.out.println("Fetched JSON content: " + jsonContent); // Logowanie JSON
+            JsonNode rootNode = objectMapper.readTree(jsonContent);
+            JsonNode dataNode = rootNode.get("data");
+
+            if (dataNode == null || !dataNode.isArray() || dataNode.size() == 0) {
+                hasMoreData = false;
+            } else {
+                for (JsonNode vehicleNode : dataNode) {
+                    try {
+                        Vehicle vehicle = createVehicleFromJson(vehicleNode);
+//                        System.out.println("Parsed vehicle: " + vehicle); // Logowanie pojazdu
+                        allVehicles.add(vehicle);
+                        System.out.println("Added vehicle: " + vehicle);
+//                        vehicle.setLiczbaPojazdow(allVehicles.size());
+                    } catch (ParseException e) {
+                        System.err.println("Error parsing vehicle data: " + e.getMessage());
+                    }
+                }
+                page++;
+            }
+        }
+
+        for (Vehicle vehicle : allVehicles) {
+            System.out.println("Saving vehicle to DB: " + vehicle);
+        }
+
+        vehicleRepository.saveAll(allVehicles);
     }
+
+    private String fetchJsonContent(String apiUrl) throws IOException {
+        try (InputStream input = new URL(apiUrl).openStream()) {
+            InputStreamReader isr = new InputStreamReader(input);
+            BufferedReader reader = new BufferedReader(isr);
+            StringBuilder json = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                json.append(line);
+            }
+            return json.toString();
+        }
+    }
+
+    private Vehicle createVehicleFromJson(JsonNode vehicleNode) throws ParseException {
+        Vehicle vehicle = new Vehicle();
+
+        JsonNode attributesNode = vehicleNode.get("attributes");
+        vehicle.setId(getLongValueOrNull(vehicleNode, "id"));
+        vehicle.setDataPierwszejRejestracjiWKraju(getValueOrNull(attributesNode, "data-pierwszej-rejestracji-w-kraju"));
+        vehicle.setRejestracjaWojewodztwo(getValueOrNull(attributesNode, "rejestracja-wojewodztwo"));
+        vehicle.setRejestracjaPowiat(getValueOrNull(attributesNode, "rejestracja-powiat"));
+        vehicle.setRejestracjaGmina(getValueOrNull(attributesNode, "rejestracja-gmina"));
+        vehicle.setMarka(getValueOrNull(attributesNode, "marka"));
+        vehicle.setRodzajPaliwa(getValueOrNull(attributesNode, "rodzaj-paliwa"));
+        return vehicle;
+    }
+
+    private String getValueOrNull(JsonNode node, String fieldName) {
+        if (node == null) {
+            return null;
+        }
+        JsonNode valueNode = node.get(fieldName);
+        return (valueNode != null && !valueNode.isNull()) ? valueNode.asText() : null;
+    }
+
+    private Integer getIntegerValueOrNull(JsonNode node, String fieldName) {
+        if (node == null) {
+            return null;
+        }
+        JsonNode valueNode = node.get(fieldName);
+        return (valueNode != null && !valueNode.isNull()) ? valueNode.asInt() : null;
+    }
+
+    private Double getDoubleValueOrNull(JsonNode node, String fieldName) {
+        if (node == null) {
+            return null;
+        }
+        JsonNode valueNode = node.get(fieldName);
+        return (valueNode != null && !valueNode.isNull()) ? valueNode.asDouble() : null;
+    }
+
+    private Date getDateOrNull(JsonNode node, String fieldName) throws ParseException {
+        if(node == null){
+            return null;
+        }
+        JsonNode valueNode = node.get(fieldName);
+        if (valueNode != null && !valueNode.isNull()) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            return dateFormat.parse(valueNode.asText());
+        } else {
+            return null;
+        }
+    }
+    private Long getLongValueOrNull(JsonNode node, String fieldName) {
+        if (node == null) {
+            return null;
+        }
+        JsonNode valueNode = node.get(fieldName);
+        return (valueNode != null && !valueNode.isNull()) ? valueNode.asLong() : null;
+    }
+
 }

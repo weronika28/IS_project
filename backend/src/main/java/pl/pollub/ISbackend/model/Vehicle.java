@@ -22,4 +22,13 @@ public class Vehicle {
 
     @Column(name = "REJESTRACJA_POWIAT")
     private String rejestracjaPowiat;
+
+    @Column(name = "MARKA")
+    private String marka;
+
+    @Column(name = "RODZAJ_PALIWA")
+    private String rodzajPaliwa;
+
+    @Column(name = "LICZBA_POJAZDOW")
+    private Integer liczbaPojazdow;
 }
