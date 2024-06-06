@@ -11,7 +11,7 @@ const FireDepartmentDataSummary = () => {
     useEffect(() => {
         axios.get('/api/fire-department/data-summary')
             .then(response => {
-                console.log("Data received from server: ", response.data); // Log received data
+                console.log("Data received from server: ", response.data); 
                 setDataSummary(response.data);
                 setLoading(false);
             })

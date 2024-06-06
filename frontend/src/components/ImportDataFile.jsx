@@ -78,7 +78,7 @@ const ImportDataFile = () => {
 
     return (
         <div className="import-data-container">
-            <h2>Tu zaimportujesz dane dotyczące wyjazdów strażackich oraz dane dotyczące zarejestrowanych pojazdów</h2>
+            <hn>Tu zaimportujesz dane dotyczące wyjazdów strażackich oraz dane dotyczące zarejestrowanych pojazdów</hn>
             <div className="import-section">
                 <input type="file" accept=".csv" onChange={handleFireDepartmentFileChange} />
                 <button className="import-button" onClick={handleImportFireDepartmentData} disabled={loadingFireDepartment}>
