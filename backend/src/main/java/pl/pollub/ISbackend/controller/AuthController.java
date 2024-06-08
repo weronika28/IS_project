@@ -45,4 +45,3 @@ public class AuthController {
         return ResponseEntity.ok(userService.save(user));
     }
 }
-
