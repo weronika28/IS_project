@@ -1,8 +1,12 @@
+import VehiclesBrand from "./VehiclesBrand";
+
 const VehicleData = () => {
     return (
         <div>
-            <hn>Strona w budowie, przepraszamy</hn>
-            <h2>Niebawem znajdziesz tu dane pojazdów </h2>
+            <hn>Dane dotyczące pojazdów</hn>
+            <div className="chart-container">
+                <VehiclesBrand />
+            </div>
         </div>
     );
 };
