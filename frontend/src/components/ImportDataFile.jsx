@@ -80,7 +80,7 @@ const ImportDataFile = () => {
     const handleImportVehicleDataFromApi = async () => {
         setLoadingVehicleApi(true);
         try {
-            const response = await axios.post('http://localhost:5000/api/vehicles/import/api?wojewodztwo=02');
+            const response = await axios.post('http://localhost:5000/api/vehicles/import/api?wojewodztwo=04');
             alert(response.data);
         } catch (error) {
             console.error("Wystąpił błąd podczas importowania danych pojazdów z API!", error);
@@ -92,7 +92,7 @@ const ImportDataFile = () => {
 
     return (
         <div className="import-data-container">
-            <hn>Tu zaimportujesz dane dotyczące wyjazdów strażackich oraz dane dotyczące zarejestrowanych pojazdów</hn>
+            <h1>Tu zaimportujesz dane dotyczące wyjazdów strażackich oraz dane dotyczące zarejestrowanych pojazdów</h1>
             <div className="import-section">
                 <input type="file" accept=".csv" onChange={handleFireDepartmentFileChange}/>
                 <button className="import-button" onClick={handleImportFireDepartmentData}

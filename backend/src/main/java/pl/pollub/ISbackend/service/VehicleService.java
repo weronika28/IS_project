@@ -40,7 +40,8 @@ public class VehicleService {
 
     public void importFromJson(String filePath) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        List<Vehicle> vehicles = mapper.readValue(new File(filePath), new TypeReference<List<Vehicle>>(){});
+        List<Vehicle> vehicles = mapper.readValue(new File(filePath), new TypeReference<List<Vehicle>>() {
+        });
         vehicleRepository.saveAll(vehicles);
     }
 
@@ -52,7 +53,8 @@ public class VehicleService {
 
     public void importFromXml(String filePath) throws IOException {
         XmlMapper mapper = new XmlMapper();
-        List<Vehicle> vehicles = mapper.readValue(new File(filePath), new TypeReference<List<Vehicle>>(){});
+        List<Vehicle> vehicles = mapper.readValue(new File(filePath), new TypeReference<List<Vehicle>>() {
+        });
         vehicleRepository.saveAll(vehicles);
     }
 
@@ -140,11 +142,25 @@ public class VehicleService {
         boolean hasMoreData = true;
 
         while (hasMoreData) {
-            String apiUrl = String.format("%s&wojewodztwo=%s&page=%d", apiUrlBase, wojewodztwo, page);
-            String jsonContent = fetchJsonContent(apiUrl);
-            System.out.println("Fetched JSON content: " + jsonContent); // Logowanie JSON
-            JsonNode rootNode = objectMapper.readTree(jsonContent);
-            JsonNode dataNode = rootNode.get("data");
+            System.out.println("Fetching page " + page);
+            JsonNode dataNode = null;
+            boolean error = true;
+            int tries = 5;
+
+            while (error) {
+                try {
+                    String apiUrl = String.format("%s&wojewodztwo=%s&page=%d", apiUrlBase, wojewodztwo, page);
+                    String jsonContent = fetchJsonContent(apiUrl);
+                    JsonNode rootNode = objectMapper.readTree(jsonContent);
+                    dataNode = rootNode.get("data");
+                    error = false;
+                } catch (Exception e) {
+                    System.out.println("Skipping error while fetching data from page " + page + ". " + e.getMessage());
+                    tries--;
+                    if (tries == 0)
+                        throw new RuntimeException(e);
+                }
+            }
 
             if (dataNode == null || !dataNode.isArray() || dataNode.size() == 0) {
                 hasMoreData = false;
@@ -152,20 +168,15 @@ public class VehicleService {
                 for (JsonNode vehicleNode : dataNode) {
                     try {
                         Vehicle vehicle = createVehicleFromJson(vehicleNode);
-//                        System.out.println("Parsed vehicle: " + vehicle); // Logowanie pojazdu
-                        allVehicles.add(vehicle);
-                        System.out.println("Added vehicle: " + vehicle);
-//                        vehicle.setLiczbaPojazdow(allVehicles.size());
+                        if (vehicle != null)
+                            allVehicles.add(vehicle);
                     } catch (ParseException e) {
-                        System.err.println("Error parsing vehicle data: " + e.getMessage());
+                        throw new RuntimeException(e);
                     }
                 }
+                System.out.println("Fetched " + dataNode.size() + " vehicles");
                 page++;
             }
-        }
-
-        for (Vehicle vehicle : allVehicles) {
-            System.out.println("Saving vehicle to DB: " + vehicle);
         }
 
         vehicleRepository.saveAll(allVehicles);
@@ -185,25 +196,53 @@ public class VehicleService {
     }
 
     private Vehicle createVehicleFromJson(JsonNode vehicleNode) throws ParseException {
+        JsonNode attributesNode = vehicleNode.get("attributes");
+
+        if (attributesNode == null) {
+            System.err.println("Attributes node is null for vehicle id: " + vehicleNode.get("id"));
+            return null;
+        }
         Vehicle vehicle = new Vehicle();
 
-        JsonNode attributesNode = vehicleNode.get("attributes");
         vehicle.setId(getLongValueOrNull(vehicleNode, "id"));
         vehicle.setDataPierwszejRejestracjiWKraju(getValueOrNull(attributesNode, "data-pierwszej-rejestracji-w-kraju"));
+        vehicle.setDataOstatniejRejestracjiWKraju(getValueOrNull(attributesNode, "data-ostatniej-rejestracji-w-kraju"));
+        vehicle.setDataWyrejestrowaniaPojazdu(getValueOrNull(attributesNode, "data-wyrejestrowania-pojazdu"));
         vehicle.setRejestracjaWojewodztwo(getValueOrNull(attributesNode, "rejestracja-wojewodztwo"));
-        vehicle.setRejestracjaPowiat(getValueOrNull(attributesNode, "rejestracja-powiat"));
         vehicle.setRejestracjaGmina(getValueOrNull(attributesNode, "rejestracja-gmina"));
+        vehicle.setRejestracjaPowiat(getValueOrNull(attributesNode, "rejestracja-powiat"));
         vehicle.setMarka(getValueOrNull(attributesNode, "marka"));
         vehicle.setRodzajPaliwa(getValueOrNull(attributesNode, "rodzaj-paliwa"));
+        vehicle.setPojemnoscSkokowaSilnika(getDoubleValueOrNull(attributesNode, "pojemnosc-skokowa-silnika"));
+        vehicle.setMocNettoSilnika(getDoubleValueOrNull(attributesNode, "moc-netto-silnika"));
+        vehicle.setMasaWlasna(getDoubleValueOrNull(attributesNode, "masa-wlasna"));
+        vehicle.setDopuszczalnaMasaCalkowita(getDoubleValueOrNull(attributesNode, "dopuszczalna-masa-calkowita"));
+        vehicle.setLiczbaMiejscSiedzacych(getIntegerValueOrNull(attributesNode, "liczba-miejsc-siedzacych"));
+        vehicle.setModel(getValueOrNull(attributesNode, "model"));
+        vehicle.setRodzajPojazdu(getValueOrNull(attributesNode, "rodzaj-pojazdu"));
+
+
         return vehicle;
+    }
+
+    private boolean isNumeric(String s) {
+        if (s == null) return false;
+
+        try {
+            Double.parseDouble(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     private String getValueOrNull(JsonNode node, String fieldName) {
         if (node == null) {
             return null;
+        } else {
+            JsonNode valueNode = node.get(fieldName);
+            return (valueNode != null && !valueNode.isNull()) ? valueNode.asText() : null;
         }
-        JsonNode valueNode = node.get(fieldName);
-        return (valueNode != null && !valueNode.isNull()) ? valueNode.asText() : null;
     }
 
     private Integer getIntegerValueOrNull(JsonNode node, String fieldName) {
@@ -223,7 +262,7 @@ public class VehicleService {
     }
 
     private Date getDateOrNull(JsonNode node, String fieldName) throws ParseException {
-        if(node == null){
+        if (node == null) {
             return null;
         }
         JsonNode valueNode = node.get(fieldName);
@@ -234,12 +273,28 @@ public class VehicleService {
             return null;
         }
     }
+
     private Long getLongValueOrNull(JsonNode node, String fieldName) {
         if (node == null) {
             return null;
         }
         JsonNode valueNode = node.get(fieldName);
-        return (valueNode != null && !valueNode.isNull()) ? valueNode.asLong() : null;
+        if (valueNode == null) {
+            return null;
+        }
+        if (valueNode.isNull()) {
+            return null;
+        }
+        return valueNode.asLong();
     }
+
+
+//    public List<Object[]> countByWojewodztwo() {
+//        return vehicleRepository.countByWojewodztwo();
+//    }
+//
+//    public List<Object[]> countByWojewodztwoAndPowiat() {
+//        return vehicleRepository.countByWojewodztwoAndPowiat();
+//    }
 
 }
