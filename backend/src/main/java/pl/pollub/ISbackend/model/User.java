@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -17,14 +19,9 @@ public class User {
     @Column(unique = true)
     private String username;
 
+    @Column
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private HashSet<Role> roles = new HashSet<>();
-
+    @Column
+    private String roles;
 }

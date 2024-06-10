@@ -4,22 +4,15 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useAuth } from '../auth/AuthContext';
+import { STORAGE_KEY } from '../axios/axios';
 
 const TopNav = () => {
-    const [loggedIn, setLoggedIn] = useState(false);
-
-    useEffect(() => {
-        const userLoggedIn = localStorage.getItem('loggedIn');
-        if (userLoggedIn === 'true') {
-            setLoggedIn(true);
-        } else {
-            setLoggedIn(false);
-        }
-    }, []);
+    const [auth, setAuth] = useAuth();
 
     const handleLogout = () => {
-        localStorage.removeItem('loggedIn');
-        setLoggedIn(false);
+        localStorage.removeItem(STORAGE_KEY);
+        setAuth(null)
     };
 
     return (
@@ -35,8 +28,11 @@ const TopNav = () => {
                         <Nav.Link as={Link} to="/correlation">Sprawdź korelacje</Nav.Link>
                     </Nav>
                     <Nav>
-                        {loggedIn ? (
-                            <Nav.Link onClick={handleLogout}><span className="glyphicon glyphicon-log-out"></span> Wyloguj</Nav.Link>
+                        {auth ? (
+                            <>
+                                <div className='text-light p-2'>Użytkownik: {auth}</div>
+                                <Nav.Link onClick={handleLogout}><span className="glyphicon glyphicon-log-out"></span> Wyloguj</Nav.Link>
+                            </>
                         ) : (
                             <>
                                 <Nav.Link as={Link} to="/register"><span className="glyphicon glyphicon-user"></span> Rejestracja</Nav.Link>
