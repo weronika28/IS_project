@@ -6,9 +6,9 @@ import Login from './components/login/Login';
 import Signup from './components/signup/Signup';
 import TopNav from './components/TopNav'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import VehicleData from './components/VehicleData';
-import Correlation from './components/Correlation'; 
+import VehicleData from './components/VehicleData'; 
 import AuthContextProvider from './auth/AuthContext';
+import VehicleFireDepartment from './components/VehicleFireDepartment';
 
 function App() {
     return (
@@ -21,7 +21,7 @@ function App() {
                         <Route path="/import" element={<ImportDataFile />} />
                         <Route path="/data-summary" element={<FireDepartmentData />} />
                         <Route path="/vehicle-data" element={<VehicleData />} /> 
-                        <Route path="/correlation" element={<Correlation />} />
+                        <Route path="/correlation" element={<VehicleFireDepartment />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Signup />} />
                     </Routes>

@@ -13,7 +13,13 @@ public class VehicleDataService {
     @Autowired
     private VehicleDataRepository vehicleDataRepository;
 
-    public List<Vehicle> findAll() {
-        return vehicleDataRepository.findAll();
+    public List<String> findAllVoivodeships() {
+        return vehicleDataRepository.findAllVoivodeships();
     }
+
+    public int countVehiclesByRejestracjaWojewodztwo(String rejestracjaWojewodztwo) {
+        return vehicleDataRepository.countVehiclesByRejestracjaWojewodztwo(rejestracjaWojewodztwo);
+    }
+
+    // Other service methods as needed
 }

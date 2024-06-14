@@ -87,6 +87,7 @@
 			<scope>provided</scope>
 		</dependency>
 
+
 	</dependencies>
 
 	<build>
@@ -101,9 +102,11 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+						<jvmArguments>
+							-Xms512m -Xmx2048m
+						</jvmArguments>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
