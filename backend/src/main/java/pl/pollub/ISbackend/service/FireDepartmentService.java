@@ -115,7 +115,7 @@ public class FireDepartmentService {
                 lineNumber++;
                 try {
                     List<String> data = splitLine(line);
-                   // System.out.println("Data after split: " + data);
+                    // System.out.println("Data after split: " + data);
 
                     FireDepartment fireDepartment = new FireDepartment();
                     for (int i = 0; i < data.size(); i++) {

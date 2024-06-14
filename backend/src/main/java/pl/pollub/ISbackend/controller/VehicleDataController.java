@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.pollub.ISbackend.service.VehicleDataService;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/vehicle-data")
@@ -25,4 +28,10 @@ public class VehicleDataController {
     public int getVehicleCountByRejestracjaWojewodztwo(@PathVariable String rejestracjaWojewodztwo) {
         return vehicleDataService.countVehiclesByRejestracjaWojewodztwo(rejestracjaWojewodztwo);
     }
+
+    @GetMapping("/vehicle-count-gmina/{rejestracjaGmina}")
+    public int getVehicleCountByRejestracjaGmina(@PathVariable String rejestracjaGmina) {
+        return vehicleDataService.countVehiclesByRejestracjaGmina(rejestracjaGmina);
+    }
+
 }

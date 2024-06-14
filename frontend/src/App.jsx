@@ -39,7 +39,7 @@ function Homepage() {
                     - zaimportujesz dane<br />
                     - sprawdzisz analizę danych opublikowanych przez PSP<br />
                     - sprawdzisz analizę zarejestrowanych pojazdów<br />
-                    - oraz będąc zalogowanym użytkownikiem sprawdzisz, czy istnieje związek między czasem dojazdu strażaków, a liczbą zarejestrowanych pojazdów.
+                    - oraz będąc zalogowanym użytkownikiem sprawdzisz, czy istnieje związek między czasem dojazdu strażaków, a liczbą nowo zarejestrowanych pojazdów.
                 </div>
             <img src="/analiza.jpg" alt="Analiza" className="homepage-image" />
         </div>

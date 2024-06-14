@@ -100,12 +100,7 @@ const ImportDataFile = () => {
                     {loadingFireDepartment ? <FaSpinner className="spinner"/> : "Importuj dane straży pożarnej"}
                 </button>
             </div>
-            <div className="import-section">
-                <input type="file" accept=".csv" onChange={handleVehicleFileChange}/>
-                <button className="import-button" onClick={handleImportVehicleData} disabled={loadingVehicle}>
-                    {loadingVehicle ? <FaSpinner className="spinner"/> : "Importuj dane pojazdów"}
-                </button>
-            </div>
+            
             <div className="import-section">
                 <button className="import-button" onClick={handleImportVehicleDataFromApi} disabled={loadingVehicleApi}>
                     {loadingVehicleApi ? <FaSpinner className="spinner"/> : "Importuj dane pojazdów z API"}

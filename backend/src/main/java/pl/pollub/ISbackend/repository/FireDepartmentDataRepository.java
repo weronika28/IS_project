@@ -18,4 +18,12 @@ public interface FireDepartmentDataRepository extends JpaRepository<FireDepartme
 
     @Query("SELECT COUNT(fd) FROM FireDepartment fd")
     long totalCount();
+
+    @Query("SELECT fd.dataZgl, fd.dataDoj, fd.wojewodztwo, fd.kilom1 FROM FireDepartment fd")
+    List<Object[]> findAllForCalculation();
+    @Query("SELECT fd.dataZgl, fd.dataDoj, fd.gmina, fd.kilom1 FROM FireDepartment fd")
+    List<Object[]> findAllForGminaCalculation();
+
+    @Query("SELECT fd.gmina, COUNT(fd) FROM FireDepartment fd GROUP BY fd.gmina")
+    List<Object[]> countByGmina();
 }

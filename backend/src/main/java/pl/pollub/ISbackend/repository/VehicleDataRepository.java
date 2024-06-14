@@ -14,4 +14,8 @@ public interface VehicleDataRepository extends JpaRepository<Vehicle, Long> {
 
     @Query(value = "SELECT COUNT(v) FROM Vehicle v WHERE v.rejestracjaWojewodztwo = :rejestracjaWojewodztwo")
     int countVehiclesByRejestracjaWojewodztwo(@Param("rejestracjaWojewodztwo") String rejestracjaWojewodztwo);
+
+    @Query(value = "SELECT COUNT(v) FROM Vehicle v WHERE v.rejestracjaGmina = :rejestracjaGmina")
+    int countVehiclesByRejestracjaGmina(@Param("rejestracjaGmina") String rejestracjaGmina);
+
 }

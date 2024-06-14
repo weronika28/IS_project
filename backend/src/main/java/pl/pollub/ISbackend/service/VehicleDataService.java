@@ -21,5 +21,10 @@ public class VehicleDataService {
         return vehicleDataRepository.countVehiclesByRejestracjaWojewodztwo(rejestracjaWojewodztwo);
     }
 
-    // Other service methods as needed
+    public int countVehiclesByRejestracjaGmina(String rejestracjaGmina) {
+        return vehicleDataRepository.countVehiclesByRejestracjaGmina(rejestracjaGmina);
+    }
+
+
+
 }
