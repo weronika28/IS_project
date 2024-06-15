@@ -7,6 +7,8 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.pollub.ISbackend.model.Vehicle;
+import pl.pollub.ISbackend.model.VehicleStatistics;
+import pl.pollub.ISbackend.repository.VehicleDataRepository;
 import pl.pollub.ISbackend.repository.VehicleRepository;
 
 import java.io.*;
@@ -23,6 +25,8 @@ public class VehicleService {
 
     @Autowired
     private VehicleRepository vehicleRepository;
+    @Autowired
+    private VehicleDataRepository vehicleDataRepository;
 
     public List<Vehicle> findAll() {
         return vehicleRepository.findAll();
@@ -288,13 +292,18 @@ public class VehicleService {
         return valueNode.asLong();
     }
 
+    public VehicleStatistics getVehicleStatisticsByVoivodeship(String voivodeship) {
+        long vehicleCount = vehicleDataRepository.countVehiclesByRejestracjaWojewodztwo(voivodeship);
 
-//    public List<Object[]> countByWojewodztwo() {
-//        return vehicleRepository.countByWojewodztwo();
-//    }
-//
-//    public List<Object[]> countByWojewodztwoAndPowiat() {
-//        return vehicleRepository.countByWojewodztwoAndPowiat();
-//    }
+        List<Object[]> mostPopularBrandResult = vehicleDataRepository.findMostPopularBrandByVoivodeship(voivodeship);
+        String mostPopularBrand = mostPopularBrandResult.isEmpty() ? "Brak danych" : (String) mostPopularBrandResult.get(0)[0];
+
+        List<Object[]> mostPopularFuelTypeResult = vehicleDataRepository.findMostPopularFuelTypeByVoivodeship(voivodeship);
+        String mostPopularFuelType = mostPopularFuelTypeResult.isEmpty() ? "Brak danych" : (String) mostPopularFuelTypeResult.get(0)[0];
+
+        double averageEngineCapacity = vehicleDataRepository.findAverageEngineCapacityByVoivodeship(voivodeship);
+
+        return new VehicleStatistics(voivodeship, vehicleCount, mostPopularBrand, mostPopularFuelType, averageEngineCapacity);
+    }
 
 }
