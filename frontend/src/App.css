@@ -83,3 +83,42 @@
   z-index: 1000;
 }
 
+.map-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  height: 80vh;
+  width: 100%;
+}
+
+.chart-container {
+  margin-top: 20px;
+}
+
+.custom-tooltip {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.custom-tooltip .label {
+  font-weight: bold;
+  color: #333;
+}
+
+.custom-tooltip .intro {
+  color: #666;
+  margin-top: 5px;
+}
+
+.custom-tooltip .car-count {
+  color: #8884d8;
+}
+
+.custom-tooltip .avg-time {
+  color: #82ca9d;
+}
+

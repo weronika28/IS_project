@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.pollub.ISbackend.service.FireDepartmentDataService;
+import pl.pollub.ISbackend.service.VehicleDataService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +17,8 @@ public class FireDepartmentDataController {
 
     @Autowired
     private FireDepartmentDataService fireDepartmentDataService;
+    @Autowired
+    private VehicleDataService vehicleDataService;
 
     @GetMapping("/data-summary")
     public ResponseEntity<Map<String, Double>> getDataSummary() {
@@ -37,7 +40,7 @@ public class FireDepartmentDataController {
 
     @GetMapping("/voivodeship-data")
     public ResponseEntity<Map<String, Map<String, Double>>> getVoivodeshipData() {
-        Map<String, Long> countByWojewodztwo = fireDepartmentDataService.getCountByWojewodztwo();
+        Map<String, Long> countByWojewodztwo = fireDepartmentDataService.getCountVehiclesByWojewodztwo();
         Map<String, Double> avgTimePerKmByWojewodztwo = fireDepartmentDataService.calculateAverageTimePerKilometer();
 
         Map<String, Map<String, Double>> voivodeshipData = new HashMap<>();
@@ -74,7 +77,7 @@ public class FireDepartmentDataController {
 
         Map<String, Map<String, Double>> selectedGminasData = new HashMap<>();
         for (String gmina : countByGmina.keySet()) {
-            if ("Opole".equals(gmina) || "Nysa".equals(gmina) || "Szczecin".equals(gmina) ||
+            if ("Opole".equals(gmina) || "Nysa".equals(gmina) || "Olszanica".equals(gmina) ||
                     "Przysucha".equals(gmina) || "Radom".equals(gmina) || "Limanowa".equals(gmina) ||
                     "Brzeg".equals(gmina) || "Lipno".equals(gmina)) {
                 Map<String, Double> data = new HashMap<>();

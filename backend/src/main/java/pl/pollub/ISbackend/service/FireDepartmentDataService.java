@@ -1,18 +1,15 @@
 package pl.pollub.ISbackend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import pl.pollub.ISbackend.model.FireDepartment;
 import pl.pollub.ISbackend.repository.FireDepartmentDataRepository;
+import pl.pollub.ISbackend.repository.VehicleDataRepository;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -20,6 +17,8 @@ public class FireDepartmentDataService {
 
     @Autowired
     private FireDepartmentDataRepository fireDepartmentDataRepository;
+    @Autowired
+    private VehicleDataRepository vehicleDataRepository;
 
     public Map<String, Double> getDataSummary() {
         PageRequest pageable = PageRequest.of(0, 1000);
@@ -42,6 +41,17 @@ public class FireDepartmentDataService {
             String wojewodztwo = (String) result[0];
             Long count = (Long) result[1];
             countMap.put(wojewodztwo, count);
+        }
+        return countMap;
+    }
+
+    public Map<String, Long> getCountVehiclesByWojewodztwo() {
+        List<Object[]> results = vehicleDataRepository.countByWojewodztwo();
+        Map<String, Long> countMap = new HashMap<>();
+        for (Object[] result : results) {
+            String wojewodztwo = (String) result[0];
+            Long count = (Long) result[1];
+            countMap.put(wojewodztwo.toLowerCase(), count);
         }
         return countMap;
     }
