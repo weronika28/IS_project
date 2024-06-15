@@ -10,6 +10,8 @@ import {
     Legend,
     ResponsiveContainer
 } from 'recharts';
+import '../App.css';
+// import fileDownload from "js-file-download";
 
 const VehicleFireDepartment = () => {
     const [voivodeships, setVoivodeships] = useState([]);
@@ -22,14 +24,14 @@ const VehicleFireDepartment = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                
                 const voivodeshipResponse = await axios.get('/api/fire-department/voivodeship-data');
+                console.log("Voivodeship data:", voivodeshipResponse.data);
                 const voivodeshipData = Object.entries(voivodeshipResponse.data).map(([wojewodztwo, values]) => ({ wojewodztwo, ...values }));
                 setVoivodeships(voivodeshipData.map(entry => entry.wojewodztwo));
                 setVoivodeshipData(voivodeshipData);
 
-               
                 const selectedGminasResponse = await axios.get('/api/fire-department/selected-gminas-data');
+                console.log("Selected Gminas data:", selectedGminasResponse.data);
                 const selectedGminasData = Object.entries(selectedGminasResponse.data).map(([gmina, values]) => ({ gmina, ...values }));
                 setSelectedGminas(selectedGminasData.map(entry => entry.gmina));
                 setSelectedGminasData(selectedGminasData);
@@ -41,6 +43,7 @@ const VehicleFireDepartment = () => {
                 setLoading(false);
             }
         };
+
 
         fetchData();
     }, []);
@@ -69,7 +72,7 @@ const VehicleFireDepartment = () => {
                     />
                     <YAxis yAxisId="left" stroke="#8884d8" />
                     <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
-                    <Tooltip />
+                    <Tooltip content={<CustomTooltip />} />
                     <Legend />
                     <Line type="monotone" dataKey="count" stroke="#8884d8" activeDot={{ r: 8 }} name="Liczba nowo zarejestrowanych samochodów" yAxisId="left" />
                     <Line type="monotone" dataKey="avgTimePerKm" stroke="#82ca9d" activeDot={{ r: 8 }} name="Średni czas przejazdu 1 km" yAxisId="right" />
@@ -89,8 +92,8 @@ const VehicleFireDepartment = () => {
                         tick={<CustomXAxisTick />}
                     />
                     <YAxis yAxisId="left" stroke="#8884d8" />
-                    <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
-                    <Tooltip />
+                    <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" tickFormatter={formatYAxis} />
+                    <Tooltip content={<CustomTooltip />} />
                     <Legend />
                     <Line type="monotone" dataKey="count" stroke="#8884d8" activeDot={{ r: 8 }} name="Liczba nowo zarejestrowanych samochodów" yAxisId="left" />
                     <Line type="monotone" dataKey="avgTimePerKm" stroke="#82ca9d" activeDot={{ r: 8 }} name="Średni czas przejazdu 1 km" yAxisId="right" />
@@ -99,6 +102,14 @@ const VehicleFireDepartment = () => {
         </div>
     );
 };
+
+const formatYAxis = (tickItem) => {
+    const totalMinutes = tickItem;
+    const minutes = Math.floor(totalMinutes);
+    const seconds = Math.round((totalMinutes - minutes) * 60);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds} min`;
+};
+
 
 const CustomXAxisTick = (props) => {
     const { x, y, payload } = props;
@@ -117,6 +128,25 @@ const CustomXAxisTick = (props) => {
             </text>
         </g>
     );
+};
+
+const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+        const totalMinutes = payload[1].value;
+        const minutes = Math.floor(totalMinutes);
+        const seconds = Math.round((totalMinutes - minutes) * 60);
+        const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds} min`;
+
+        return (
+            <div className="custom-tooltip">
+                <p className="label">{`${label}`}</p>
+                <p className="intro car-count">{`Liczba nowo zarejestrowanych samochodów: ${payload[0].value}`}</p>
+                <p className="intro avg-time">{`Średni czas przejazdu 1 km: ${formattedTime}`}</p>
+            </div>
+        );
+    }
+
+    return null;
 };
 
 export default VehicleFireDepartment;

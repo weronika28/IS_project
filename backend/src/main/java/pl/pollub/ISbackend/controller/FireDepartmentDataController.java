@@ -72,22 +72,32 @@ public class FireDepartmentDataController {
 
     @GetMapping("/selected-gminas-data")
     public ResponseEntity<Map<String, Map<String, Double>>> getSelectedGminasData() {
-        Map<String, Long> countByGmina = fireDepartmentDataService.getCountByGmina();
+        Map<String, Long> countByGmina = fireDepartmentDataService.getCountVehiclesByGmina();
         Map<String, Double> avgTimePerKmByGmina = fireDepartmentDataService.calculateAverageTimePerKilometerByGmina();
 
         Map<String, Map<String, Double>> selectedGminasData = new HashMap<>();
         for (String gmina : countByGmina.keySet()) {
-            if ("Opole".equals(gmina) || "Nysa".equals(gmina) || "Olszanica".equals(gmina) ||
-                    "Przysucha".equals(gmina) || "Radom".equals(gmina) || "Limanowa".equals(gmina) ||
-                    "Brzeg".equals(gmina) || "Lipno".equals(gmina)) {
+            if (gmina != null && (
+                    "opole".equalsIgnoreCase(gmina) || "nysa".equalsIgnoreCase(gmina) || "szczecin".equalsIgnoreCase(gmina) ||
+                            "sanok".equalsIgnoreCase(gmina) || "przysucha".equalsIgnoreCase(gmina) || "radom".equalsIgnoreCase(gmina) ||
+                            "limanowa".equalsIgnoreCase(gmina) || "brzeg".equalsIgnoreCase(gmina) || "lipno".equalsIgnoreCase(gmina))) {
                 Map<String, Double> data = new HashMap<>();
                 data.put("count", countByGmina.get(gmina).doubleValue());
-                data.put("avgTimePerKm", avgTimePerKmByGmina.getOrDefault(gmina, 0.0));
+                data.put("avgTimePerKm", avgTimePerKmByGmina.getOrDefault(gmina.toLowerCase(), 0.0));
                 selectedGminasData.put(gmina, data);
             }
         }
 
+        // Logowanie danych przed zwróceniem odpowiedzi
+        selectedGminasData.forEach((gmina, data) -> {
+            System.out.println("Gmina: " + gmina + ", Data: " + data);
+        });
+
         return ResponseEntity.ok(selectedGminasData);
     }
+
+
+
+
 
 }

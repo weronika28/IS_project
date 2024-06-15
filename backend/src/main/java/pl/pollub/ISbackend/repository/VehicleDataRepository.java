@@ -20,6 +20,8 @@ public interface VehicleDataRepository extends JpaRepository<Vehicle, Long> {
 
     @Query("SELECT v.rejestracjaWojewodztwo, COUNT(v) FROM Vehicle v GROUP BY v.rejestracjaWojewodztwo")
     List<Object[]> countByWojewodztwo();
+    @Query("SELECT v.rejestracjaGmina, COUNT(v) FROM Vehicle v GROUP BY v.rejestracjaGmina")
+    List<Object[]> countByGmina();
 
     @Query("SELECT v.rejestracjaWojewodztwo, v.marka, COUNT(v) as cnt FROM Vehicle v GROUP BY v.rejestracjaWojewodztwo, v.marka ORDER BY cnt DESC")
     List<Object[]> mostPopularBrandByWojewodztwo();

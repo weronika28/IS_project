@@ -116,6 +116,28 @@ public class FireDepartmentDataService {
         return countMap;
     }
 
+//    public Map<String, Long> getCountVehiclesByGmina() {
+//        List<Object[]> results = vehicleDataRepository.countByGmina();
+//        Map<String, Long> countMap = new HashMap<>();
+//        for (Object[] result : results) {
+//            String gmina = (String) result[0];
+//            Long count = (Long) result[1];
+//            countMap.put(gmina, count);
+//        }
+//        return countMap;
+//    }
+public Map<String, Long> getCountVehiclesByGmina() {
+    List<Object[]> results = vehicleDataRepository.countByGmina();
+    Map<String, Long> countMap = new HashMap<>();
+    for (Object[] result : results) {
+        String gmina = (String) result[0];
+        Long count = ((Number) result[1]).longValue(); // Convert to Long if necessary
+        countMap.put(gmina, count);
+    }
+    return countMap;
+}
+
+
     public Map<String, Double> calculateAverageTimePerKilometerByGmina() {
         List<Object[]> results = fireDepartmentDataRepository.findAllForGminaCalculation();
         Map<String, Double> totalTimes = new HashMap<>();
@@ -128,20 +150,16 @@ public class FireDepartmentDataService {
             Double kilom1 = (Double) result[3];
 
             if (dataZgl != null && dataDoj != null && kilom1 != null && kilom1 > 0) {
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-                String godzinaDojazdu = sdf.format(dataDoj);
-
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(dataDoj);
-                cal.add(Calendar.MINUTE, -3);
-                Date dataDojMinus3Min = cal.getTime();
-
-                long diffInMillies = Math.abs(dataDojMinus3Min.getTime() - dataZgl.getTime());
+                long diffInMillies = Math.abs(dataDoj.getTime() - dataZgl.getTime());
                 double diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(diffInMillies);
                 double timePerKilometer = diffInMinutes / kilom1;
 
-                totalTimes.put(gmina, totalTimes.getOrDefault(gmina, 0.0) + timePerKilometer);
-                count.put(gmina, count.getOrDefault(gmina, 0) + 1);
+                if (gmina != null) {
+                    totalTimes.put(gmina.toLowerCase(), totalTimes.getOrDefault(gmina.toLowerCase(), 0.0) + timePerKilometer);
+                    count.put(gmina.toLowerCase(), count.getOrDefault(gmina.toLowerCase(), 0) + 1);
+                } else {
+                    System.out.println("Null gmina encountered");
+                }
             }
         }
 
@@ -150,7 +168,17 @@ public class FireDepartmentDataService {
             averageTimes.put(gmina, totalTimes.get(gmina) / count.get(gmina));
         }
 
+        // Logowanie wyników obliczeń
+        averageTimes.forEach((gmina, avgTime) -> {
+            System.out.println("Gmina: " + gmina + ", Average Time per Km: " + avgTime);
+        });
+
         return averageTimes;
     }
+
+
+
+
+
 
 }
