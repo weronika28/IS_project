@@ -12,6 +12,7 @@ import {
 } from 'recharts';
 import '../App.css';
 // import fileDownload from "js-file-download";
+import { saveAs } from 'file-saver';
 
 const VehicleFireDepartment = () => {
     const [voivodeships, setVoivodeships] = useState([]);
@@ -56,47 +57,66 @@ const VehicleFireDepartment = () => {
         return <div>Error: {error}</div>;
     }
 
+    const handleExport = async (format) => {
+        try {
+            const response = await axios.post(`/api/fire-department/export?format=${format}`, { voivodeshipData, selectedGminasData }, {
+                responseType: 'blob',
+            });
+            const blob = new Blob([response.data], { type: response.headers['content-type'] });
+            saveAs(blob, `correlation_data.${format}`);
+        } catch (error) {
+            console.error('Error exporting data:', error);
+        }
+    };
+
     return (
-        <div style={{ width: '100%', height: 1200 }}>
+        <div style={{width: '100%', height: 1200}}>
             <h2>Dane dla województw</h2>
             <ResponsiveContainer width="100%" height={600}>
                 <LineChart data={voivodeshipData}>
-                    <CartesianGrid strokeDasharray="3 3" />
+                    <CartesianGrid strokeDasharray="3 3"/>
                     <XAxis
                         dataKey="wojewodztwo"
                         angle={-45}
                         textAnchor="end"
                         interval={0}
                         height={120}
-                        tick={<CustomXAxisTick />}
+                        tick={<CustomXAxisTick/>}
                     />
-                    <YAxis yAxisId="left" stroke="#8884d8" />
-                    <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
-                    <Tooltip content={<CustomTooltip />} />
-                    <Legend />
-                    <Line type="monotone" dataKey="count" stroke="#8884d8" activeDot={{ r: 8 }} name="Liczba nowo zarejestrowanych samochodów" yAxisId="left" />
-                    <Line type="monotone" dataKey="avgTimePerKm" stroke="#82ca9d" activeDot={{ r: 8 }} name="Średni czas przejazdu 1 km" yAxisId="right" />
+                    <YAxis yAxisId="left" stroke="#8884d8"/>
+                    <YAxis yAxisId="right" orientation="right" stroke="#82ca9d"/>
+                    <Tooltip content={<CustomTooltip/>}/>
+                    <Legend/>
+                    <Line type="monotone" dataKey="count" stroke="#8884d8" activeDot={{r: 8}}
+                          name="Liczba nowo zarejestrowanych samochodów" yAxisId="left"/>
+                    <Line type="monotone" dataKey="avgTimePerKm" stroke="#82ca9d" activeDot={{r: 8}}
+                          name="Średni czas przejazdu 1 km" yAxisId="right"/>
                 </LineChart>
             </ResponsiveContainer>
+
+            <button onClick={() => handleExport('json')}>Export to JSON</button>
+            <button onClick={() => handleExport('xml')}>Export to XML</button>
 
             <h2>Dane dla wybranych gmin</h2>
             <ResponsiveContainer width="100%" height={600}>
                 <LineChart data={selectedGminasData}>
-                    <CartesianGrid strokeDasharray="3 3" />
+                    <CartesianGrid strokeDasharray="3 3"/>
                     <XAxis
                         dataKey="gmina"
                         angle={-45}
                         textAnchor="end"
                         interval={0}
                         height={120}
-                        tick={<CustomXAxisTick />}
+                        tick={<CustomXAxisTick/>}
                     />
-                    <YAxis yAxisId="left" stroke="#8884d8" />
-                    <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" tickFormatter={formatYAxis} />
-                    <Tooltip content={<CustomTooltip />} />
-                    <Legend />
-                    <Line type="monotone" dataKey="count" stroke="#8884d8" activeDot={{ r: 8 }} name="Liczba nowo zarejestrowanych samochodów" yAxisId="left" />
-                    <Line type="monotone" dataKey="avgTimePerKm" stroke="#82ca9d" activeDot={{ r: 8 }} name="Średni czas przejazdu 1 km" yAxisId="right" />
+                    <YAxis yAxisId="left" stroke="#8884d8"/>
+                    <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" tickFormatter={formatYAxis}/>
+                    <Tooltip content={<CustomTooltip/>}/>
+                    <Legend/>
+                    <Line type="monotone" dataKey="count" stroke="#8884d8" activeDot={{r: 8}}
+                          name="Liczba nowo zarejestrowanych samochodów" yAxisId="left"/>
+                    <Line type="monotone" dataKey="avgTimePerKm" stroke="#82ca9d" activeDot={{r: 8}}
+                          name="Średni czas przejazdu 1 km" yAxisId="right"/>
                 </LineChart>
             </ResponsiveContainer>
         </div>

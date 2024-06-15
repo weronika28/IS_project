@@ -1,10 +1,13 @@
 package pl.pollub.ISbackend.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.pollub.ISbackend.service.FireDepartmentDataService;
 import pl.pollub.ISbackend.service.VehicleDataService;
 
@@ -96,7 +99,58 @@ public class FireDepartmentDataController {
         return ResponseEntity.ok(selectedGminasData);
     }
 
+//    @PostMapping("/export")
+//    public ResponseEntity<byte[]> exportData(@RequestParam String format) {
+//        byte[] data;
+//        String filename;
+//
+//        if ("xml".equalsIgnoreCase(format)) {
+//            data = fireDepartmentDataService.exportToXml();
+//            filename = "correlation_data.xml";
+//        } else if ("json".equalsIgnoreCase(format)) {
+//            data = fireDepartmentDataService.exportToJson();
+//            filename = "correlation_data.json";
+//        } else {
+//            return ResponseEntity.badRequest().body(null);
+//        }
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentDispositionFormData(filename, filename);
+//        headers.setContentType("xml".equalsIgnoreCase(format) ? MediaType.APPLICATION_XML : MediaType.APPLICATION_JSON);
+//
+//        return ResponseEntity.ok().headers(headers).body(data);
+//    }
 
+    @PostMapping("/export")
+    public ResponseEntity<byte[]> exportData(@RequestParam String format, @RequestBody Map<String, Object> requestData) {
+        byte[] data;
+        String filename;
+        MediaType mediaType;
+
+        try {
+            if ("xml".equalsIgnoreCase(format)) {
+                XmlMapper xmlMapper = new XmlMapper();
+                data = xmlMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(requestData);
+                filename = "correlation_data.xml";
+                mediaType = MediaType.APPLICATION_XML;
+            } else if ("json".equalsIgnoreCase(format)) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                data = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(requestData);
+                filename = "correlation_data.json";
+                mediaType = MediaType.APPLICATION_JSON;
+            } else {
+                return ResponseEntity.badRequest().body(null);
+            }
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.status(500).body(null);
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDispositionFormData(filename, filename);
+        headers.setContentType(mediaType);
+
+        return ResponseEntity.ok().headers(headers).body(data);
+    }
 
 
 

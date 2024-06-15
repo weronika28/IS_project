@@ -1,5 +1,8 @@
 package pl.pollub.ISbackend.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -176,7 +179,60 @@ public Map<String, Long> getCountVehiclesByGmina() {
         return averageTimes;
     }
 
+    public byte[] exportToXml() {
+        List<Object[]> results = fireDepartmentDataRepository.findAllForGminaCalculation();
+        Map<String, Object> dataMap = processResults(results);
 
+        XmlMapper xmlMapper = new XmlMapper();
+        try {
+            return xmlMapper.writeValueAsBytes(dataMap);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert data to XML", e);
+        }
+    }
+
+    public byte[] exportToJson() {
+        List<Object[]> results = fireDepartmentDataRepository.findAllForGminaCalculation();
+        Map<String, Object> dataMap = processResults(results);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsBytes(dataMap);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert data to JSON", e);
+        }
+    }
+
+    private Map<String, Object> processResults(List<Object[]> results) {
+        Map<String, Double> totalTimes = new HashMap<>();
+        Map<String, Integer> count = new HashMap<>();
+        Map<String, Object> dataMap = new HashMap<>();
+
+        for (Object[] result : results) {
+            Date dataZgl = (Date) result[0];
+            Date dataDoj = (Date) result[1];
+            String gmina = (String) result[2];
+            Double kilom1 = (Double) result[3];
+
+            if (dataZgl != null && dataDoj != null && kilom1 != null && kilom1 > 0) {
+                long diffInMillies = Math.abs(dataDoj.getTime() - dataZgl.getTime());
+                double diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(diffInMillies);
+                double timePerKilometer = diffInMinutes / kilom1;
+
+                totalTimes.put(gmina, totalTimes.getOrDefault(gmina, 0.0) + timePerKilometer);
+                count.put(gmina, count.getOrDefault(gmina, 0) + 1);
+            }
+        }
+
+        Map<String, Double> averageTimes = new HashMap<>();
+        for (String gmina : totalTimes.keySet()) {
+            averageTimes.put(gmina, totalTimes.get(gmina) / count.get(gmina));
+        }
+
+        dataMap.put("totalTimes", totalTimes);
+        dataMap.put("averageTimes", averageTimes);
+        return dataMap;
+    }
 
 
 
