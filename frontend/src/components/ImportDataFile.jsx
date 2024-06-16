@@ -94,17 +94,24 @@ const ImportDataFile = () => {
 
     return (
         <div className="import-data-container">
-            <h1>Tu zaimportujesz dane dotyczące wyjazdów strażackich oraz dane dotyczące zarejestrowanych pojazdów</h1>
-            <div className="import-section">
+            <h1 className={"mb-5"}>Tu zaimportujesz dane dotyczące wyjazdów strażackich oraz dane dotyczące zarejestrowanych pojazdów</h1>
+            <h4>
+                Import danych straży pożarnej
+            </h4>
+            <div className="import-section mb-5">
                 <input type="file" accept=".csv" onChange={handleFireDepartmentFileChange}/>
+                <br/>
                 <button className="import-button" onClick={handleImportFireDepartmentData}
                         disabled={loadingFireDepartment}>
                     {loadingFireDepartment ? <FaSpinner className="spinner"/> : "Importuj dane straży pożarnej"}
                 </button>
             </div>
             <div className="import-section">
-                <label>
-                    Wybierz województwo:
+                <h4>
+                    Import danych pojazdów
+                </h4>
+                <label className="">
+                    Wybierz województwo: <br/>
                     <select value={wojewodztwo} onChange={(e) => setWojewodztwo(e.target.value)}>
                         <option value="02">Dolnośląskie</option>
                         <option value="04">Kujawsko-pomorskie</option>
@@ -124,6 +131,7 @@ const ImportDataFile = () => {
                         <option value="32">Zachodniopomorskie</option>
                     </select>
                 </label>
+                <br/>
                 <button className="import-button" onClick={handleImportVehicleDataFromApi} disabled={loadingVehicleApi}>
                     {loadingVehicleApi ? <FaSpinner className="spinner"/> : "Importuj dane pojazdów z API"}
                 </button>
