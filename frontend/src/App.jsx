@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import ImportDataFile from './components/ImportDataFile'; 
@@ -9,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import VehicleData from './components/VehicleData'; 
 import AuthContextProvider from './auth/AuthContext';
 import VehicleFireDepartment from './components/VehicleFireDepartment';
+import Homepage from './components/Homepage'; 
 
 function App() {
     return (
@@ -30,21 +32,5 @@ function App() {
         </AuthContextProvider>
     );
 }
-
-function Homepage() {
-    return (
-        <div className="homepage-container">
-             <h2>Hej, na naszej stronie:</h2>
-                 <div>
-                    - zaimportujesz dane<br />
-                    - sprawdzisz analizę danych opublikowanych przez PSP<br />
-                    - sprawdzisz analizę zarejestrowanych pojazdów<br />
-                    - oraz będąc zalogowanym użytkownikiem sprawdzisz, czy istnieje związek między czasem dojazdu strażaków, a liczbą nowo zarejestrowanych pojazdów.
-                </div>
-            <img src="/analiza.jpg" alt="Analiza" className="homepage-image" />
-        </div>
-    );
-}
-
 
 export default App;

@@ -11,7 +11,7 @@ const VehicleData = () => {
 
     return (
         <div>
-            <h1>Dane dotyczące pojazdów</h1>
+            <hn>Podsumowanie danych dotyczących pojazdów</hn>
             <PolandMapLeaflet onSelectVoivodeship={handleSelectVoivodeship} />
             <div className="chart-container">
                 <VehiclesBrand selectedVoivodeship={selectedVoivodeship} />
