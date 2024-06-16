@@ -42,7 +42,7 @@ const VehiclesBrand = ({ selectedVoivodeship }) => {
         <div>
             <h2>Dane dla województwa: {selectedVoivodeship}</h2>
             <ul>
-                <li>Ilość samochodów: {data.totalVehicles}</li>
+                <li>Liczba nowo zarejestrowanych pojazdów: {data.totalVehicles}</li>
                 <li>Najpopularniejsza marka: {data.mostPopularBrand}</li>
                 <li>Najpopularniejszy rodzaj paliwa: {data.mostPopularFuelType}</li>
                 <li>Średnia pojemność skokowa silnika: {data.averageEngineCapacity.toFixed(2)}</li>

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import geoData from '/src/woj_maps.json';
 import L from 'leaflet'; // Fix import for leaflet icons
@@ -26,15 +26,35 @@ const PolandMapLeaflet = ({ onSelectVoivodeship }) => {
         });
     };
 
+    const MapSettings = () => {
+        const map = useMap();
+
+        useEffect(() => {
+            map.setView([52.237049, 19.145136], 6);
+            map.zoomControl.remove();
+            map.dragging.disable();
+            map.scrollWheelZoom.disable();
+            map.doubleClickZoom.disable();
+            map.boxZoom.disable();
+            map.touchZoom.disable();
+        }, [map]);
+
+        return null;
+    };
 
     return (
         <div className="map-container">
-            <MapContainer center={[52.1, 19.4]} zoom={6} style={{ height: "80vh", width: "100%" }}>
-                <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                />
+            <MapContainer
+                center={[52.1, 19.4]}
+                zoom={6}
+                style={{ height: "80vh", width: "100%" }}
+            >
+                {/*<TileLayer*/}
+                {/*    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"*/}
+                {/*    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'*/}
+                {/*/>*/}
                 <GeoJSON data={geoData} onEachFeature={onEachFeature} />
+                <MapSettings />
             </MapContainer>
         </div>
     );

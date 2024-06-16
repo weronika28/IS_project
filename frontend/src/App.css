@@ -92,6 +92,10 @@
   width: 100%;
 }
 
+.map-container div{
+  background-color: #fff;
+}
+
 .chart-container {
   margin-top: 20px;
 }
@@ -120,5 +124,9 @@
 
 .custom-tooltip .avg-time {
   color: #82ca9d;
+}
+
+.leaflet-control-attribution{
+  display: none;
 }
 

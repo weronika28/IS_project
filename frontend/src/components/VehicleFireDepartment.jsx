@@ -94,7 +94,8 @@ const VehicleFireDepartment = () => {
                 </LineChart>
             </ResponsiveContainer>
 
-            <div style={{ marginBottom: '60px', padding: '10px', backgroundColor: '#f0f0f0', border: '1px solid #ccc', borderRadius: '5px' }}>                <h3>Exportuj dane dotyczące województw:</h3>
+            <div style={{ marginBottom: '60px', padding: '10px', backgroundColor: '#f0f0f0', border: '1px solid #ccc', borderRadius: '5px' }}>
+                <h3>Exportuj dane dotyczące województw:</h3>
                 <button onClick={() => handleExport('json')}>Export to JSON</button>
                 <button onClick={() => handleExport('xml')}>Export to XML</button>
             </div>

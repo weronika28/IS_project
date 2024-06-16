@@ -8,6 +8,7 @@ const ImportDataFile = () => {
     const [loadingFireDepartment, setLoadingFireDepartment] = useState(false);
     const [loadingVehicle, setLoadingVehicle] = useState(false);
     const [loadingVehicleApi, setLoadingVehicleApi] = useState(false);
+    const [wojewodztwo, setWojewodztwo] = useState('02');
 
     const handleFireDepartmentFileChange = (e) => {
         const file = e.target.files[0];
@@ -80,7 +81,8 @@ const ImportDataFile = () => {
     const handleImportVehicleDataFromApi = async () => {
         setLoadingVehicleApi(true);
         try {
-            const response = await axios.post('http://localhost:5000/api/vehicles/import/api?wojewodztwo=04');
+            let url = `http://localhost:5000/api/vehicles/import/api?wojewodztwo=${wojewodztwo}`;
+            const response = await axios.post(url);
             alert(response.data);
         } catch (error) {
             console.error("Wystąpił błąd podczas importowania danych pojazdów z API!", error);
@@ -100,8 +102,28 @@ const ImportDataFile = () => {
                     {loadingFireDepartment ? <FaSpinner className="spinner"/> : "Importuj dane straży pożarnej"}
                 </button>
             </div>
-            
             <div className="import-section">
+                <label>
+                    Wybierz województwo:
+                    <select value={wojewodztwo} onChange={(e) => setWojewodztwo(e.target.value)}>
+                        <option value="02">Dolnośląskie</option>
+                        <option value="04">Kujawsko-pomorskie</option>
+                        <option value="06">Lubelskie</option>
+                        <option value="08">Lubuskie</option>
+                        <option value="10">Łódzkie</option>
+                        <option value="12">Małopolskie</option>
+                        <option value="14">Mazowieckie</option>
+                        <option value="16">Opolskie</option>
+                        <option value="18">Podkarpackie</option>
+                        <option value="20">Podlaskie</option>
+                        <option value="22">Pomorskie</option>
+                        <option value="24">Śląskie</option>
+                        <option value="26">Świętokrzyskie</option>
+                        <option value="28">Warmińsko-mazurskie</option>
+                        <option value="30">Wielkopolskie</option>
+                        <option value="32">Zachodniopomorskie</option>
+                    </select>
+                </label>
                 <button className="import-button" onClick={handleImportVehicleDataFromApi} disabled={loadingVehicleApi}>
                     {loadingVehicleApi ? <FaSpinner className="spinner"/> : "Importuj dane pojazdów z API"}
                 </button>
