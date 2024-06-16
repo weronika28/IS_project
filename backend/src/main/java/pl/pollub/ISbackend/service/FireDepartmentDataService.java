@@ -119,27 +119,16 @@ public class FireDepartmentDataService {
         return countMap;
     }
 
-//    public Map<String, Long> getCountVehiclesByGmina() {
-//        List<Object[]> results = vehicleDataRepository.countByGmina();
-//        Map<String, Long> countMap = new HashMap<>();
-//        for (Object[] result : results) {
-//            String gmina = (String) result[0];
-//            Long count = (Long) result[1];
-//            countMap.put(gmina, count);
-//        }
-//        return countMap;
-//    }
-public Map<String, Long> getCountVehiclesByGmina() {
-    List<Object[]> results = vehicleDataRepository.countByGmina();
-    Map<String, Long> countMap = new HashMap<>();
-    for (Object[] result : results) {
-        String gmina = (String) result[0];
-        Long count = ((Number) result[1]).longValue(); // Convert to Long if necessary
-        countMap.put(gmina, count);
+    public Map<String, Long> getCountVehiclesByGmina() {
+        List<Object[]> results = vehicleDataRepository.countByGmina();
+        Map<String, Long> countMap = new HashMap<>();
+        for (Object[] result : results) {
+            String gmina = (String) result[0];
+            Long count = ((Number) result[1]).longValue(); // Convert to Long if necessary
+            countMap.put(gmina, count);
+        }
+        return countMap;
     }
-    return countMap;
-}
-
 
     public Map<String, Double> calculateAverageTimePerKilometerByGmina() {
         List<Object[]> results = fireDepartmentDataRepository.findAllForGminaCalculation();
@@ -171,7 +160,6 @@ public Map<String, Long> getCountVehiclesByGmina() {
             averageTimes.put(gmina, totalTimes.get(gmina) / count.get(gmina));
         }
 
-        // Logowanie wyników obliczeń
         averageTimes.forEach((gmina, avgTime) -> {
             System.out.println("Gmina: " + gmina + ", Average Time per Km: " + avgTime);
         });

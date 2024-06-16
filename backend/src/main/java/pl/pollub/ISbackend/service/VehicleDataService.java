@@ -36,8 +36,8 @@ public class VehicleDataService {
         List<Object[]> popularFuels = vehicleDataRepository.mostPopularFuelTypeByWojewodztwo();
         List<Object[]> avgEngineCapacity = vehicleDataRepository.averageEngineCapacityByWojewodztwo();
 
-        data.put("mostPopularBrand", popularBrands.get(0)[1]); // Assuming the first result is the most popular
-        data.put("mostPopularFuelType", popularFuels.get(0)[1]); // Assuming the first result is the most popular
+        data.put("mostPopularBrand", popularBrands.get(0)[1]);
+        data.put("mostPopularFuelType", popularFuels.get(0)[1]);
         data.put("averageEngineCapacity", avgEngineCapacity.get(0)[1]);
 
         return data;

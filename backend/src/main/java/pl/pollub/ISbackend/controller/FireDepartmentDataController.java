@@ -99,27 +99,6 @@ public class FireDepartmentDataController {
         return ResponseEntity.ok(selectedGminasData);
     }
 
-//    @PostMapping("/export")
-//    public ResponseEntity<byte[]> exportData(@RequestParam String format) {
-//        byte[] data;
-//        String filename;
-//
-//        if ("xml".equalsIgnoreCase(format)) {
-//            data = fireDepartmentDataService.exportToXml();
-//            filename = "correlation_data.xml";
-//        } else if ("json".equalsIgnoreCase(format)) {
-//            data = fireDepartmentDataService.exportToJson();
-//            filename = "correlation_data.json";
-//        } else {
-//            return ResponseEntity.badRequest().body(null);
-//        }
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentDispositionFormData(filename, filename);
-//        headers.setContentType("xml".equalsIgnoreCase(format) ? MediaType.APPLICATION_XML : MediaType.APPLICATION_JSON);
-//
-//        return ResponseEntity.ok().headers(headers).body(data);
-//    }
 
     @PostMapping("/export")
     public ResponseEntity<byte[]> exportData(@RequestParam String format, @RequestBody Map<String, Object> requestData) {

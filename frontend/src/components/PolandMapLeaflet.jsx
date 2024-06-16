@@ -49,10 +49,6 @@ const PolandMapLeaflet = ({ onSelectVoivodeship }) => {
                 zoom={6}
                 style={{ height: "80vh", width: "100%" }}
             >
-                {/*<TileLayer*/}
-                {/*    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"*/}
-                {/*    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'*/}
-                {/*/>*/}
                 <GeoJSON data={geoData} onEachFeature={onEachFeature} />
                 <MapSettings />
             </MapContainer>

@@ -26,54 +26,7 @@ public class VehicleController {
         return vehicleService.save(vehicle);
     }
 
-    @GetMapping("/export/json")
-    public ResponseEntity<String> exportToJson() {
-        try {
-            vehicleService.exportToJson("vehicles.json");
-            return ResponseEntity.ok("Export to JSON successful");
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body("Export to JSON failed: " + e.getMessage());
-        }
-    }
 
-    @PostMapping("/import/json")
-    public ResponseEntity<String> importFromJson() {
-        try {
-            vehicleService.importFromJson("vehicles.json");
-            return ResponseEntity.ok("Import from JSON successful");
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body("Import from JSON failed: " + e.getMessage());
-        }
-    }
-
-    @GetMapping("/export/xml")
-    public ResponseEntity<String> exportToXml() {
-        try {
-            vehicleService.exportToXml("vehicles.xml");
-            return ResponseEntity.ok("Export to XML successful");
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body("Export to XML failed: " + e.getMessage());
-        }
-    }
-
-    @PostMapping("/import/xml")
-    public ResponseEntity<String> importFromXml() {
-        try {
-            vehicleService.importFromXml("vehicles.xml");
-            return ResponseEntity.ok("Import from XML successful");
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body("Import from XML failed: " + e.getMessage());
-        }
-    }
-//    @PostMapping("/import/csv")
-//    public ResponseEntity<String> importFromCsv(@RequestParam("file") MultipartFile file) {
-//        try {
-//            vehicleService.importFromCsv(file);
-//            return ResponseEntity.ok("Import z CSV zakończony sukcesem");
-//        } catch (IOException e) {
-//            return ResponseEntity.status(500).body("Import z CSV nie powiódł się: " + e.getMessage());
-//        }
-//    }
     @PostMapping("/import/api")
     public ResponseEntity<String> importFromApi(@RequestParam String wojewodztwo) {
         String apiUrlBase = "https://api.cepik.gov.pl/pojazdy?data-od=20230101&data-do=20231231&typ-daty=1&tylko-zarejestrowane=true&pokaz-wszystkie-pola=false&fields=data-pierwszej-rejestracji-w-kraju&fields=data-ostatniej-rejestracji-w-kraju&fields=data-wyrejestrowania-pojazdu&fields=rejestracja-wojewodztwo&fields=rejestracja-gmina&fields=rejestracja-powiat&fields=marka&fields=rodzaj-paliwa&fields=pojemnosc-skokowa-silnika&fields=moc-netto-silnika&fields=masa-wlasna&fields=dopuszczalna-masa-calkowita&fields=liczba-miejsc-siedzacych&fields=model&fields=rodzaj-pojazdu&limit=500";

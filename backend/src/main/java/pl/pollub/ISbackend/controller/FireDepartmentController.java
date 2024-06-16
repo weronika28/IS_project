@@ -54,26 +54,6 @@ public class FireDepartmentController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/export/json")
-    public ResponseEntity<String> exportToJson() {
-        try {
-            fireDepartmentService.exportToJson("fire_departments.json");
-            return ResponseEntity.ok("Export to JSON successful");
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body("Export to JSON failed: " + e.getMessage());
-        }
-    }
-
-    @PostMapping("/import/json")
-    public ResponseEntity<String> importFromJson() {
-        try {
-            fireDepartmentService.importFromJson("fire_departments.json");
-            return ResponseEntity.ok("Import from JSON successful");
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body("Import from JSON failed: " + e.getMessage());
-        }
-    }
-
     @PostMapping("/import/csv")
     public ResponseEntity<String> importFromCsv(@RequestParam("file") MultipartFile file) {
         try {
@@ -84,24 +64,5 @@ public class FireDepartmentController {
         }
     }
 
-    @GetMapping("/export/xml")
-    public ResponseEntity<String> exportToXml() {
-        try {
-            fireDepartmentService.exportToXml("fire_departments.xml");
-            return ResponseEntity.ok("Export to XML successful");
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body("Export to XML failed: " + e.getMessage());
-        }
-    }
-
-    @PostMapping("/import/xml")
-    public ResponseEntity<String> importFromXml() {
-        try {
-            fireDepartmentService.importFromXml("fire_departments.xml");
-            return ResponseEntity.ok("Import from XML successful");
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body("Import from XML failed: " + e.getMessage());
-        }
-    }
 }
 

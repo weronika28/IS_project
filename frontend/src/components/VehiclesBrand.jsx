@@ -26,6 +26,10 @@ const VehiclesBrand = ({ selectedVoivodeship }) => {
         }
     }, [selectedVoivodeship]);
 
+    if (!selectedVoivodeship) {
+        return <div>Wybierz województwo, żeby zobaczyć dane</div>;
+    }
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -34,18 +38,15 @@ const VehiclesBrand = ({ selectedVoivodeship }) => {
         return <div>There was an error loading the data: {error.message}</div>;
     }
 
-    if (!data) {
-        return <div>Select a voivodeship to see data</div>;
-    }
 
     return (
         <div>
             <h2>Dane dla województwa: {selectedVoivodeship}</h2>
             <ul>
-                <li>Liczba nowo zarejestrowanych pojazdów: {data.totalVehicles}</li>
-                <li>Najpopularniejsza marka: {data.mostPopularBrand}</li>
-                <li>Najpopularniejszy rodzaj paliwa: {data.mostPopularFuelType}</li>
-                <li>Średnia pojemność skokowa silnika: {data.averageEngineCapacity.toFixed(2)}</li>
+                <ul>Liczba nowo zarejestrowanych pojazdów: {data.totalVehicles}</ul>
+                <ul>Najpopularniejsza marka: {data.mostPopularBrand}</ul>
+                <ul>Najpopularniejszy rodzaj paliwa: {data.mostPopularFuelType}</ul>
+                <ul>Średnia pojemność skokowa silnika: {data.averageEngineCapacity.toFixed(2)}</ul>
             </ul>
         </div>
     );

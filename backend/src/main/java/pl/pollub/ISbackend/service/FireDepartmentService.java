@@ -1,8 +1,5 @@
 package pl.pollub.ISbackend.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,12 +7,14 @@ import pl.pollub.ISbackend.model.FireDepartment;
 import pl.pollub.ISbackend.repository.FireDepartmentRepository;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FireDepartmentService {
@@ -37,32 +36,6 @@ public class FireDepartmentService {
 
     public void deleteById(String id) {
         fireDepartmentRepository.deleteById(id);
-    }
-
-    public void exportToJson(String filePath) throws IOException {
-        List<FireDepartment> fireDepartments = fireDepartmentRepository.findAll();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(new File(filePath), fireDepartments);
-    }
-
-    public void importFromJson(String filePath) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        List<FireDepartment> fireDepartments = mapper.readValue(new File(filePath), new TypeReference<>() {
-        });
-        fireDepartmentRepository.saveAll(fireDepartments);
-    }
-
-    public void exportToXml(String filePath) throws IOException {
-        List<FireDepartment> fireDepartments = fireDepartmentRepository.findAll();
-        XmlMapper mapper = new XmlMapper();
-        mapper.writeValue(new File(filePath), fireDepartments);
-    }
-
-    public void importFromXml(String filePath) throws IOException {
-        XmlMapper mapper = new XmlMapper();
-        List<FireDepartment> fireDepartments = mapper.readValue(new File(filePath), new TypeReference<>() {
-        });
-        fireDepartmentRepository.saveAll(fireDepartments);
     }
 
     private String getValueOrNull(String value) {

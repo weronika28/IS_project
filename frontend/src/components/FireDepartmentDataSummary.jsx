@@ -33,14 +33,14 @@ const FireDepartmentDataSummary = () => {
 
     const chartData = {
         labels: [
-            'ZUZ_WODY (m3)', 'ZUZ_PROSZKU (kg)', 'ZUZ_PIANY (dm3)', 'ZUZ_NEUT (kg)', 'ZUZ_SORB (kg)'
+            'Zużycie wody (m3)', 'Zużycie proszku (kg)', 'Zużycie piany (dm3)',  'Zużycie sorbentu (kg)'
         ],
         datasets: [
             {
                 label: 'Zużycie',
                 data: [
                     dataSummary.zuzWody, dataSummary.zuzProszku,
-                    dataSummary.zuzPiany, dataSummary.zuzNeut, dataSummary.zuzSorb
+                    dataSummary.zuzPiany, dataSummary.zuzSorb
                 ],
                 backgroundColor: 'rgba(75, 192, 192, 0.6)'
             }
