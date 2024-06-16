@@ -39,6 +39,6 @@ public interface VehicleDataRepository extends JpaRepository<Vehicle, Long> {
     List<Object[]> findMostPopularFuelTypeByVoivodeship(@Param("rejestracjaWojewodztwo") String rejestracjaWojewodztwo);
 
     @Query("SELECT AVG(v.pojemnoscSkokowaSilnika) FROM Vehicle v WHERE v.rejestracjaWojewodztwo = :rejestracjaWojewodztwo")
-    double findAverageEngineCapacityByVoivodeship(@Param("rejestracjaWojewodztwo") String rejestracjaWojewodztwo);
+    Double findAverageEngineCapacityByVoivodeship(@Param("rejestracjaWojewodztwo") String rejestracjaWojewodztwo);
 
 }

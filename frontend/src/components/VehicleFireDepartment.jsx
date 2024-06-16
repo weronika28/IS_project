@@ -70,7 +70,7 @@ const VehicleFireDepartment = () => {
     };
 
     return (
-        <div style={{width: '100%', height: 1200}}>
+        <div style={{width: '100%'}} className={"my-5"}>
             <hn>Dane dla województw</hn>
             <ResponsiveContainer width="100%" height={600}>
                 <LineChart data={voivodeshipData}>
@@ -102,7 +102,7 @@ const VehicleFireDepartment = () => {
 
 
             <hn>Dane dla wybranych gmin</hn>
-            <ResponsiveContainer width="100%" height={600}>
+            <ResponsiveContainer width="100%" height={600} marginBottom={60}>
                 <LineChart data={selectedGminasData}>
                     <CartesianGrid strokeDasharray="3 3"/>
                     <XAxis

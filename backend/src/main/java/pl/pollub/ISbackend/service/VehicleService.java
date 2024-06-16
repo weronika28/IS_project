@@ -189,7 +189,10 @@ public class VehicleService {
         List<Object[]> mostPopularFuelTypeResult = vehicleDataRepository.findMostPopularFuelTypeByVoivodeship(voivodeship);
         String mostPopularFuelType = mostPopularFuelTypeResult.isEmpty() ? "Brak danych" : (String) mostPopularFuelTypeResult.get(0)[0];
 
-        double averageEngineCapacity = vehicleDataRepository.findAverageEngineCapacityByVoivodeship(voivodeship);
+        Double averageEngineCapacity = vehicleDataRepository.findAverageEngineCapacityByVoivodeship(voivodeship);
+        if(averageEngineCapacity == null) {
+            averageEngineCapacity = 0.0;
+        }
 
         return new VehicleStatistics(voivodeship, vehicleCount, mostPopularBrand, mostPopularFuelType, averageEngineCapacity);
     }

@@ -41,7 +41,7 @@ const VehiclesBrand = ({ selectedVoivodeship }) => {
 
     return (
         <div>
-            <h2>Dane dla województwa: {selectedVoivodeship}</h2>
+            <h2>Dane dla województwa {selectedVoivodeship.toLowerCase()}go</h2>
             <ul>
                 <ul>Liczba nowo zarejestrowanych pojazdów: {data.totalVehicles}</ul>
                 <ul>Najpopularniejsza marka: {data.mostPopularBrand}</ul>

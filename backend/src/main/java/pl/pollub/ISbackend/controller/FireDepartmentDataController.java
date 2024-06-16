@@ -54,7 +54,9 @@ public class FireDepartmentDataController {
             voivodeshipData.put(wojewodztwo, data);
         }
 
-        return ResponseEntity.ok(voivodeshipData);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(voivodeshipData);
     }
 
     @GetMapping("/gmina-data")
@@ -96,7 +98,9 @@ public class FireDepartmentDataController {
             System.out.println("Gmina: " + gmina + ", Data: " + data);
         });
 
-        return ResponseEntity.ok(selectedGminasData);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(selectedGminasData);
     }
 
 
@@ -111,12 +115,12 @@ public class FireDepartmentDataController {
                 XmlMapper xmlMapper = new XmlMapper();
                 data = xmlMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(requestData);
                 filename = "correlation_data.xml";
-                mediaType = MediaType.APPLICATION_XML;
+                mediaType = MediaType.APPLICATION_OCTET_STREAM;
             } else if ("json".equalsIgnoreCase(format)) {
                 ObjectMapper objectMapper = new ObjectMapper();
                 data = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(requestData);
                 filename = "correlation_data.json";
-                mediaType = MediaType.APPLICATION_JSON;
+                mediaType = MediaType.APPLICATION_OCTET_STREAM;
             } else {
                 return ResponseEntity.badRequest().body(null);
             }
