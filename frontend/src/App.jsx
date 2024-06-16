@@ -11,6 +11,8 @@ import VehicleData from './components/VehicleData';
 import AuthContextProvider from './auth/AuthContext';
 import VehicleFireDepartment from './components/VehicleFireDepartment';
 import Homepage from './components/Homepage'; 
+import ProtectedRoute from './components/ProtectedRoute'; 
+import UnauthorizedInfo from './components/UnauthorizedInfo'; 
 
 function App() {
     return (
@@ -23,9 +25,10 @@ function App() {
                         <Route path="/import" element={<ImportDataFile />} />
                         <Route path="/data-summary" element={<FireDepartmentData />} />
                         <Route path="/vehicle-data" element={<VehicleData />} /> 
-                        <Route path="/correlation" element={<VehicleFireDepartment />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Signup />} />
+                        <Route path="/correlation" element={<ProtectedRoute element={<VehicleFireDepartment />} />} />
+                        <Route path="/correlation" element={<UnauthorizedInfo />} />
                     </Routes>
                 </div>
             </Router>

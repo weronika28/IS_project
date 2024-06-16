@@ -71,7 +71,7 @@ const VehicleFireDepartment = () => {
 
     return (
         <div style={{width: '100%', height: 1200}}>
-            <h2>Dane dla województw</h2>
+            <hn>Dane dla województw</hn>
             <ResponsiveContainer width="100%" height={600}>
                 <LineChart data={voivodeshipData}>
                     <CartesianGrid strokeDasharray="3 3"/>
@@ -94,10 +94,13 @@ const VehicleFireDepartment = () => {
                 </LineChart>
             </ResponsiveContainer>
 
-            <button onClick={() => handleExport('json')}>Export to JSON</button>
-            <button onClick={() => handleExport('xml')}>Export to XML</button>
+            <div style={{ marginBottom: '60px', padding: '10px', backgroundColor: '#f0f0f0', border: '1px solid #ccc', borderRadius: '5px' }}>                <h3>Exportuj dane dotyczące województw:</h3>
+                <button onClick={() => handleExport('json')}>Export to JSON</button>
+                <button onClick={() => handleExport('xml')}>Export to XML</button>
+            </div>
 
-            <h2>Dane dla wybranych gmin</h2>
+
+            <hn>Dane dla wybranych gmin</hn>
             <ResponsiveContainer width="100%" height={600}>
                 <LineChart data={selectedGminasData}>
                     <CartesianGrid strokeDasharray="3 3"/>
