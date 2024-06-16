@@ -146,9 +146,10 @@ public class FireDepartmentService {
                             case "TERYT":
                                 fireDepartment.setTeryt(getDoubleValueOrNull(data.get(i)));
                                 break;
-                            case "WOJEWODZTWO":
+                            case "WOJEWODZTWO": {
                                 fireDepartment.setWojewodztwo(data.get(i));
                                 break;
+                            }
                             case "POWIAT":
                                 fireDepartment.setPowiat(data.get(i));
                                 break;

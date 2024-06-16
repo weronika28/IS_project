@@ -37,7 +37,9 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("dupa").authenticated();
+                    auth.requestMatchers("/api/fire-department/voivodeship-data").authenticated();
+                    auth.requestMatchers("/api/fire-department/selected-gminas-data").authenticated();
+                    auth.requestMatchers("/api/fire-department/export").authenticated();
                     auth.anyRequest().permitAll();
                 })
                 .sessionManagement((configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)))
