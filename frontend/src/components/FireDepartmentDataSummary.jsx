@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
-//import { axios } from '../axios/axios'; na tym nie dziala
-import axios from 'axios';
+import { axios } from '../axios/axios';
 
 const FireDepartmentDataSummary = () => {
     const [dataSummary, setDataSummary] = useState(null);

@@ -1,9 +1,5 @@
-FROM httpd:2.4.59
+FROM nginx
 
-WORKDIR /app
+COPY ./dist /usr/share/nginx/html
 
-COPY ./dist/ /usr/local/apache2/htdocs/
-
-EXPOSE 80
-
-CMD ["httpd-foreground"]
+COPY nginx.conf /etc/nginx/conf.d/default.conf

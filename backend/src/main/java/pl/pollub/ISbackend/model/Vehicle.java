@@ -8,7 +8,6 @@ import lombok.Data;
 @Data
 public class Vehicle {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "DATA_PIERWSZEJ_REJESTRACJI_W_KRAJU")

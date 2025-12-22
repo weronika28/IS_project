@@ -1,8 +1,8 @@
 package pl.pollub.ISbackend.controller;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class AuthenticationRequest {
     private String username;
     private String password;

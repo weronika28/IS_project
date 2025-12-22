@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import {axios} from '../axios/axios.js';
 
 // eslint-disable-next-line react/prop-types
 const VehiclesBrand = ({ selectedVoivodeship }) => {

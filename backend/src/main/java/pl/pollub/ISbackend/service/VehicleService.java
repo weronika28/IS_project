@@ -16,9 +16,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 @Service
@@ -39,12 +37,12 @@ public class VehicleService {
 
     public void importFromApi(String apiUrlBase, String wojewodztwo) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        List<Vehicle> allVehicles = new ArrayList<>();
 
         int page = 1;
         boolean hasMoreData = true;
 
         while (hasMoreData) {
+            List<Vehicle> allVehicles = new ArrayList<>();
             System.out.println("Fetching page " + page);
             JsonNode dataNode = null;
             boolean error = true;
@@ -80,9 +78,8 @@ public class VehicleService {
                 System.out.println("Fetched " + dataNode.size() + " vehicles");
                 page++;
             }
+            vehicleRepository.saveAll(allVehicles);
         }
-
-        vehicleRepository.saveAll(allVehicles);
     }
 
     private String fetchJsonContent(String apiUrl) throws IOException {
@@ -190,7 +187,7 @@ public class VehicleService {
         String mostPopularFuelType = mostPopularFuelTypeResult.isEmpty() ? "Brak danych" : (String) mostPopularFuelTypeResult.get(0)[0];
 
         Double averageEngineCapacity = vehicleDataRepository.findAverageEngineCapacityByVoivodeship(voivodeship);
-        if(averageEngineCapacity == null) {
+        if (averageEngineCapacity == null) {
             averageEngineCapacity = 0.0;
         }
 

@@ -1,8 +1,8 @@
-FROM openjdk:22
+FROM amazoncorretto:22
 
 COPY ./target/*.jar /backend.jar
 
-ENV spring_profiles_active docker
+ENV spring_profiles_active=docker
 
 EXPOSE 5000
 

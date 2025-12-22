@@ -9,23 +9,32 @@ services:
       MYSQL_PASSWORD: ispass
     ports:
       - "3306:3306"
-  backend:
-    image: isbackend
-    container_name: isbackend
-    ports:
-      - "5000:5000"
-    depends_on:
-      - database
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: isphpmyadmin
     environment:
-      DATABASE_HOST: isdatabase
-      DATABASE_PORT: 3306
-      DATABASE_NAME: IS_database
-      DATABASE_USER: user
-      DATABASE_PASSWORD: ispass
-  frontend:
-    image: isfrontend
-    container_name: isfrontend
+      PMA_HOST: isdatabase
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: pass
     ports:
-      - "5173:80"
-    depends_on:
-      - backend
+      - "8080:80"
+#  backend:
+#    image: isbackend
+#    container_name: isbackend
+#    ports:
+#      - "5000:5000"
+#    depends_on:
+#      - database
+#    environment:
+#      DATABASE_HOST: isdatabase
+#      DATABASE_PORT: 3306
+#      DATABASE_NAME: IS_database
+#      DATABASE_USER: user
+#      DATABASE_PASSWORD: ispass
+#  frontend:
+#    image: isfrontend
+#    container_name: isfrontend
+#    ports:
+#      - "5173:80"
+#    depends_on:
+#      - backend

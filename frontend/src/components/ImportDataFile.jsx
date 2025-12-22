@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import axios from 'axios';
-import { FaSpinner } from 'react-icons/fa';
+import {useState} from 'react';
+import {axios} from '../axios/axios';
+import {FaSpinner} from 'react-icons/fa';
 
 const ImportDataFile = () => {
     const [fireDepartmentFile, setFireDepartmentFile] = useState(null);
@@ -39,7 +39,7 @@ const ImportDataFile = () => {
 
         setLoadingFireDepartment(true);
         try {
-            const response = await axios.post('http://localhost:5000/api/fire-department/import/csv', formData, {
+            const response = await axios.post('http://api.local/api/fire-department/import/csv', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -64,7 +64,7 @@ const ImportDataFile = () => {
 
         setLoadingVehicle(true);
         try {
-            const response = await axios.post('http://localhost:5000/api/vehicles/import/csv', formData, {
+            const response = await axios.post('http://api.local/api/vehicles/import/csv', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -81,7 +81,7 @@ const ImportDataFile = () => {
     const handleImportVehicleDataFromApi = async () => {
         setLoadingVehicleApi(true);
         try {
-            let url = `http://localhost:5000/api/vehicles/import/api?wojewodztwo=${wojewodztwo}`;
+            let url = `http://api.local/api/vehicles/import/api?wojewodztwo=${wojewodztwo}`;
             const response = await axios.post(url);
             alert(response.data);
         } catch (error) {
@@ -94,7 +94,8 @@ const ImportDataFile = () => {
 
     return (
         <div className="import-data-container">
-            <h1 className={"mb-5"}>Tu zaimportujesz dane dotyczące wyjazdów strażackich oraz dane dotyczące zarejestrowanych pojazdów</h1>
+            <h1 className={"mb-5"}>Tu zaimportujesz dane dotyczące wyjazdów strażackich oraz dane dotyczące
+                zarejestrowanych pojazdów</h1>
             <h4>
                 Import danych straży pożarnej
             </h4>
